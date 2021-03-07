@@ -13,8 +13,6 @@ namespace TemplateNetCore.Repository.EF.Configurations.Transactions
 
             builder.ToTable("transaction");
 
-            builder.HasKey(entity => entity.Id);
-
             builder.Property(entity => entity.Description)
                 .HasColumnName("description")
                 .HasMaxLength(100);

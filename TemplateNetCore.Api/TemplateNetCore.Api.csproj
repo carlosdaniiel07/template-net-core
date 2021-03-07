@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TemplateNetCore.Api.Repository\TemplateNetCore.Repository.csproj" />
     <ProjectReference Include="..\TemplateNetCore.Domain\TemplateNetCore.Domain.csproj" />
     <ProjectReference Include="..\TemplateNetCore.Repository.EF\TemplateNetCore.Repository.EF.csproj" />

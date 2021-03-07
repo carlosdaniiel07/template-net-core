@@ -25,6 +25,8 @@ namespace TemplateNetCore.Api
             services.AddScopedServices();
             services.AddTransientServices();
             services.AddControllers();
+            services.AddAuthenticationJwt(Configuration.GetSection("Settings").GetValue<string>("JwtSecret"));
+            services.AddSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,10 +38,21 @@ namespace TemplateNetCore.Api
             }
 
             app.UseHttpsRedirection();
+            
             app.UseRouting();
+            
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            app.UseMiddleware<GlobalErrorHandlerMiddleware>();
+
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Template .NET Core");
+            });
+
+            app.UseMiddleware<GlobalErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

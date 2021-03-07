@@ -1,4 +1,6 @@
-﻿using TemplateNetCore.Domain.Dto.Transactions;
+﻿using System.Collections.Generic;
+
+using TemplateNetCore.Domain.Dto.Transactions;
 using TemplateNetCore.Domain.Entities.Transactions;
 using TemplateNetCore.Domain.Enums.Transactions;
 using TemplateNetCore.Domain.Interfaces.Transactions;
@@ -14,6 +16,11 @@ namespace TemplateNetCore.Service.Transactions
         public TransactionService(IUnityOfWork unityOfWork)
         {
             _unityOfWork = unityOfWork;
+        }
+
+        public IEnumerable<Transaction> GetAll()
+        {
+            return _unityOfWork.TransactionRepository.GetAll();
         }
 
         public Transaction Save(PostTransactionDto postTransactionDto)

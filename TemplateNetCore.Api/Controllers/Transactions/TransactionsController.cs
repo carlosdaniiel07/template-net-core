@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 using TemplateNetCore.Domain.Dto.Transactions;
 using TemplateNetCore.Domain.Entities.Transactions;
@@ -8,6 +10,7 @@ namespace TemplateNetCore.Api.Controllers.Transactions
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TransactionsController : Controller
     {
         private readonly ITransactionService _transactionService;
@@ -17,8 +20,14 @@ namespace TemplateNetCore.Api.Controllers.Transactions
             _transactionService = transactionService;
         }
 
+        [HttpGet]
+        public ActionResult<IEnumerable<Transaction>> GetAll()
+        {
+            return Ok(_transactionService.GetAll());
+        }
+
         [HttpPost]
-        public ActionResult<Transaction> Index([FromBody] PostTransactionDto postTransactionDto)
+        public ActionResult<Transaction> Save([FromBody] PostTransactionDto postTransactionDto)
         {
             return Ok(_transactionService.Save(postTransactionDto));
         }

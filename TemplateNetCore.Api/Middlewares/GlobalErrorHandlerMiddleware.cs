@@ -4,6 +4,8 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Text.Json;
 
+using TemplateNetCore.Service.Exceptions;
+
 namespace TemplateNetCore.Api.Middlewares
 {
     public class GlobalErrorHandlerMiddleware
@@ -25,7 +27,7 @@ namespace TemplateNetCore.Api.Middlewares
                 var response = context.Response;
                 
                 response.ContentType = "application/json";
-                response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.StatusCode = ex is CustomException ? (ex as CustomException).StatusCode : (int)HttpStatusCode.InternalServerError;
 
                 var jsonResponse = JsonSerializer.Serialize(new { message = ex?.Message ?? "Ocorreu um erro desconhecido. Tente novamente mais tarde" });
 
