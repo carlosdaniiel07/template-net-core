@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using System;
 using TemplateNetCore.Domain.Entities.Transactions;
 using TemplateNetCore.Domain.Entities.Users;
 using TemplateNetCore.Repository.EF.Configurations.Transactions;
@@ -16,7 +16,13 @@ namespace TemplateNetCore.Repository.EF
         {
 
         }
-            
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(Console.WriteLine);
+        }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
