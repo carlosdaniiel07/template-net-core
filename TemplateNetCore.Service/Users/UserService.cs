@@ -1,4 +1,5 @@
-﻿using TemplateNetCore.Domain.Entities.Users;
+﻿using System.Threading.Tasks;
+using TemplateNetCore.Domain.Entities.Users;
 using TemplateNetCore.Domain.Dto.Users;
 using TemplateNetCore.Domain.Interfaces.Users;
 using TemplateNetCore.Repository;
@@ -19,9 +20,9 @@ namespace TemplateNetCore.Service.Users
             _tokenService = tokenService;
         }
 
-        public GetLoginResponseDto Login(PostLoginDto postLoginDto)
+        public async Task<GetLoginResponseDto> Login(PostLoginDto postLoginDto)
         {
-            var user = _unityOfWork.UserRepository.Get(user => user.Email == postLoginDto.Email);
+            var user = await _unityOfWork.UserRepository.GetAsync(user => user.Email == postLoginDto.Email);
             var isInvalidPassword = user == null || !_hashService.Compare(user.Password, postLoginDto.Password);
 
             if (isInvalidPassword)
@@ -35,27 +36,21 @@ namespace TemplateNetCore.Service.Users
             };
         }
 
-        public void SignUp(PostSignUpDto signUpDto)
+        public async Task SignUp(User user)
         {
-            var emailExists = _unityOfWork.UserRepository.Any(user => user.Email == signUpDto.Email);
+            var emailExists = await _unityOfWork.UserRepository.AnyAsync(user => user.Email == user.Email);
 
             if (emailExists)
             {
                 throw new BusinessRuleException("Já existe um usuário com este e-mail");
             }
 
-            var user = new User
-            {
-                Name = signUpDto.Name,
-                Email = signUpDto.Email,
-                Password = _hashService.Hash(signUpDto.Password),
-                Role = signUpDto.Role,
-                LastLogin = null,
-                IsActive = true,
-            };
+            user.Password = _hashService.Hash(user.Password);
+            user.LastLogin = null;
+            user.IsActive = true;
 
-            _unityOfWork.UserRepository.Add(user);
-            _unityOfWork.Commit();
+            await _unityOfWork.UserRepository.AddAsync(user);
+            await _unityOfWork.CommitAsync();
         }
     }
 }

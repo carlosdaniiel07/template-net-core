@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
-using TemplateNetCore.Api.Middlewares;
+using TemplateNetCore.Api.Infraestructure;
 using TemplateNetCore.Api.Infraestructure.Extensions;
+using TemplateNetCore.Api.Middlewares;
 
 namespace TemplateNetCore.Api
 {
@@ -27,6 +27,7 @@ namespace TemplateNetCore.Api
             services.AddControllers();
             services.AddAuthenticationJwt(Configuration.GetSection("Settings").GetValue<string>("JwtSecret"));
             services.AddSwagger();
+            services.AddAutoMapper(config => config.AddProfile<AutoMapping>(), typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
