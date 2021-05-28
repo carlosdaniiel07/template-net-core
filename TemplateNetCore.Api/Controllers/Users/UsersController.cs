@@ -14,7 +14,7 @@ namespace TemplateNetCore.Api.Controllers.Users
         private readonly IUserService _service;
         private readonly IMapper _mapper;
 
-        public UsersController(IUserService userService, IMapper mapper)
+        public UsersController(IUserService service, IMapper mapper)
         {
             _service = userService;
             _mapper = mapper;

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-
-using TemplateNetCore.Domain.Dto.Transactions;
+using System.Threading.Tasks;
 using TemplateNetCore.Domain.Entities.Transactions;
 using TemplateNetCore.Domain.Enums.Transactions;
 using TemplateNetCore.Domain.Interfaces.Transactions;
@@ -18,24 +17,17 @@ namespace TemplateNetCore.Service.Transactions
             _unityOfWork = unityOfWork;
         }
 
-        public IEnumerable<Transaction> GetAll()
+        public async Task<IEnumerable<Transaction>> GetAll()
         {
-            return _unityOfWork.TransactionRepository.GetAll();
+            return await _unityOfWork.TransactionRepository.GetAllAsync();
         }
 
-        public Transaction Save(PostTransactionDto postTransactionDto)
+        public async Task<Transaction> Save(Transaction transaction)
         {
-            var transaction = new Transaction
-            {
-                Date = postTransactionDto.Date,
-                Description = postTransactionDto.Description,
-                Value = postTransactionDto.Value,
-                TargetKey = postTransactionDto.TargetKey,
-                Status = TransactionStatus.Pending
-            };
+            transaction.Status = TransactionStatus.Pending;
 
-            _unityOfWork.TransactionRepository.Add(transaction);
-            _unityOfWork.Commit();
+            await _unityOfWork.TransactionRepository.AddAsync(transaction);
+            await _unityOfWork.CommitAsync();
 
             return transaction;
         }

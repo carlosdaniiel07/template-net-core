@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using TemplateNetCore.Domain.Entities.Transactions;
-using TemplateNetCore.Domain.Dto.Transactions;
 
 namespace TemplateNetCore.Domain.Interfaces.Transactions
 {
     public interface ITransactionService
     {
-        IEnumerable<Transaction> GetAll();
-        Transaction Save(PostTransactionDto postTransactionDto);
+        Task<IEnumerable<Transaction>> GetAll();
+        Task<Transaction> Save(Transaction transaction);
     }
 }

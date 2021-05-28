@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TemplateNetCore.Domain.Dto.Transactions;
 using TemplateNetCore.Domain.Entities.Transactions;
 using TemplateNetCore.Domain.Interfaces.Transactions;
@@ -13,22 +15,25 @@ namespace TemplateNetCore.Api.Controllers.Transactions
     public class TransactionsController : Controller
     {
         private readonly ITransactionService _service;
+        private readonly IMapper _mapper;
 
-        public TransactionsController(ITransactionService transactionService)
+        public TransactionsController(ITransactionService service, IMapper mapper)
         {
-            _service = transactionService;
+            _service = service;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Transaction>> GetAll()
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetAll()
         {
-            return Ok(_service.GetAll());
+            return Ok(await _service.GetAll());
         }
 
         [HttpPost]
-        public ActionResult<Transaction> Save([FromBody] PostTransactionDto postTransactionDto)
+        public async Task<ActionResult<Transaction>> Save([FromBody] PostTransactionDto postTransactionDto)
         {
-            return Ok(_service.Save(postTransactionDto));
+            var transaction = _mapper.Map<Transaction>(postTransactionDto);
+            return Ok(await _service.Save(transaction));
         }
     }
 }
