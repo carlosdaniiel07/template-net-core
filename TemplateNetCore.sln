@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Domain", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Service", "TemplateNetCore.Service\TemplateNetCore.Service.csproj", "{CB9E4684-876F-4847-B60E-A19C6D4ACA8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Repository", "TemplateNetCore.Api.Repository\TemplateNetCore.Repository.csproj", "{78F1FC09-FA8F-4B75-A35F-789A77CC970D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Repository", "TemplateNetCore.Repository\TemplateNetCore.Repository.csproj", "{78F1FC09-FA8F-4B75-A35F-789A77CC970D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Repository.EF", "TemplateNetCore.Repository.EF\TemplateNetCore.Repository.EF.csproj", "{A38F1FE4-10BD-4694-9653-D56350606C6F}"
 EndProject

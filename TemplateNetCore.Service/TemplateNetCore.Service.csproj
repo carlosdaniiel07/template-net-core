@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TemplateNetCore.Api.Repository\TemplateNetCore.Repository.csproj" />
     <ProjectReference Include="..\TemplateNetCore.Domain\TemplateNetCore.Domain.csproj" />
+    <ProjectReference Include="..\TemplateNetCore.Repository\TemplateNetCore.Repository.csproj" />
   </ItemGroup>
 
 </Project>
