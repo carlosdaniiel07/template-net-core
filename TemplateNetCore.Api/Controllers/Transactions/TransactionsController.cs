@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-
 using TemplateNetCore.Domain.Dto.Transactions;
 using TemplateNetCore.Domain.Entities.Transactions;
 using TemplateNetCore.Domain.Interfaces.Transactions;
