@@ -12,6 +12,7 @@ namespace TemplateNetCore.Api.Infraestructure
         {
             CreateMap<PostSignUpDto, User>();
             CreateMap<PostTransactionDto, Transaction>();
+            CreateMap<Transaction, GetTransactionDto>();
         }
     }
 }

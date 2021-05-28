@@ -24,9 +24,10 @@ namespace TemplateNetCore.Api.Controllers.Transactions
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetAll()
+        public async Task<ActionResult<IEnumerable<GetTransactionDto>>> GetAll()
         {
-            return Ok(await _service.GetAll());
+            var transactions = _mapper.Map<IEnumerable<GetTransactionDto>>(await _service.GetAll());
+            return Ok(transactions);
         }
 
         [HttpPost]
