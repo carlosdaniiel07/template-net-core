@@ -16,7 +16,7 @@ namespace TemplateNetCore.Api.Controllers.Users
 
         public UsersController(IUserService service, IMapper mapper)
         {
-            _service = userService;
+            _service = service;
             _mapper = mapper;
         }
 
