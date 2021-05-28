@@ -18,6 +18,7 @@ namespace TemplateNetCore.Repository.Interfaces
         void Add(T t);
         void Update(T t);
         void Delete(T t);
+        void SoftDelete(T t);
         void AddRange(IEnumerable<T> ts);
 
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression = null);

@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-
 using TemplateNetCore.Domain.Entities;
 using TemplateNetCore.Repository.Interfaces;
 
@@ -60,6 +59,12 @@ namespace TemplateNetCore.Repository.EF.Repositories
         public Task DeleteAsync(T t)
         {
             throw new NotImplementedException();
+        }
+
+        public void SoftDelete(T t)
+        {
+            t.DeletedAt = DateTime.Now;
+            dbSet.Update(t);
         }
 
         public T Get(Expression<Func<T, bool>> expression = null)

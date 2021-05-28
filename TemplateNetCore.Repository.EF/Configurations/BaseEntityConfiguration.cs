@@ -11,12 +11,17 @@ namespace TemplateNetCore.Repository.EF.Configurations
         {
             builder.HasKey(entity => entity.Id);
 
+            builder.HasQueryFilter(entity => entity.DeletedAt == null);
+
             builder.Property(entity => entity.Id)
                 .HasColumnName("id");
 
             builder.Property(entity => entity.CreatedAt)
                 .HasColumnName("created_at")
                 .IsRequired();
+
+            builder.Property(entity => entity.DeletedAt)
+                .HasColumnName("deleted_at");
         }
     }
 }
