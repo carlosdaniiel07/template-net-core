@@ -12,23 +12,23 @@ namespace TemplateNetCore.Api.Controllers.Transactions
     [Authorize]
     public class TransactionsController : Controller
     {
-        private readonly ITransactionService _transactionService;
+        private readonly ITransactionService _service;
 
         public TransactionsController(ITransactionService transactionService)
         {
-            _transactionService = transactionService;
+            _service = transactionService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Transaction>> GetAll()
         {
-            return Ok(_transactionService.GetAll());
+            return Ok(_service.GetAll());
         }
 
         [HttpPost]
         public ActionResult<Transaction> Save([FromBody] PostTransactionDto postTransactionDto)
         {
-            return Ok(_transactionService.Save(postTransactionDto));
+            return Ok(_service.Save(postTransactionDto));
         }
     }
 }

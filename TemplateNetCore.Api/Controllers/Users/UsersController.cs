@@ -9,24 +9,24 @@ namespace TemplateNetCore.Api.Controllers.Users
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUserService _service;
 
         public UsersController(IUserService userService)
         {
-            _userService = userService;
+            _service = userService;
         }
 
         [HttpPost("signup")]
         public ActionResult SignUp([FromBody] PostSignUpDto signUpDto)
         {
-            _userService.SignUp(signUpDto);
+            _service.SignUp(signUpDto);
             return Ok();
         }
 
         [HttpPost("auth")]
         public ActionResult<GetLoginResponseDto> Login([FromBody] PostLoginDto postLoginDto)
         {
-            return Ok(_userService.Login(postLoginDto));
+            return Ok(_service.Login(postLoginDto));
         }
     }
 }
