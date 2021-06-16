@@ -1,5 +1,5 @@
 ﻿using System;
-
+using TemplateNetCore.Domain.Entities.Users;
 using TemplateNetCore.Domain.Enums.Transactions;
 
 namespace TemplateNetCore.Domain.Entities.Transactions
@@ -11,5 +11,7 @@ namespace TemplateNetCore.Domain.Entities.Transactions
         public string TargetKey { get; set; }
         public DateTime Date { get; set; }
         public TransactionStatus Status { get; set; }
+        public User User { get; set; }
+        public Guid UserId { get; set; }
     }
 }

@@ -5,12 +5,10 @@ namespace TemplateNetCore.Domain.Dto.Users
 {
     public class PostSignUpDto
     {
-
         [Required]
         public string Name{ get; set; }
 
         [Required]
-        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]
@@ -18,6 +16,7 @@ namespace TemplateNetCore.Domain.Dto.Users
         public string Password { get; set; }
 
         [Required]
+        [EnumDataType(typeof(UserRole))]
         public UserRole Role { get; set; }
     }
 }

@@ -5,7 +5,6 @@ namespace TemplateNetCore.Domain.Dto.Users
     public class PostLoginDto
     {
         [Required]
-        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]

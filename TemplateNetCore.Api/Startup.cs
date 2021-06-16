@@ -24,6 +24,7 @@ namespace TemplateNetCore.Api
             services.AddDbContext(Configuration.GetConnectionString("Local"));
             services.AddScopedServices();
             services.AddTransientServices();
+            services.AddHttpContextAccessor();
             services.AddControllers();
             services.AddAuthenticationJwt(Configuration.GetSection("Settings").GetValue<string>("JwtSecret"));
             services.AddSwagger();

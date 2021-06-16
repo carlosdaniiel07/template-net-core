@@ -117,6 +117,39 @@ namespace TemplateNetCore.Repository.EF.Repositories
                 .ToList();
         }
 
+        public async Task<IEnumerable<T>> GetAllAsync(string[] includes)
+        {
+            IQueryable<T> query = dbSet;
+
+            includes.ToList().ForEach(navigationProperty =>
+            {
+                query = query.Include(navigationProperty);
+            });
+
+            return await query
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync(string[] includes, Expression<Func<T, bool>> expression = null)
+        {
+            IQueryable<T> query = dbSet;
+
+            includes.ToList().ForEach(navigationProperty =>
+            {
+                query = query.Include(navigationProperty);
+            });
+
+            if (expression != null)
+            {
+                query = query.Where(expression);
+            }
+
+            return await query
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression = null)
         {
             IQueryable<T> query = dbSet;

@@ -11,6 +11,7 @@ namespace TemplateNetCore.Api.Infraestructure
         public AutoMapping()
         {
             CreateMap<PostSignUpDto, User>();
+            CreateMap<User, GetUserDto>();
             CreateMap<PostTransactionDto, Transaction>();
             CreateMap<Transaction, GetTransactionDto>();
         }

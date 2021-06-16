@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
-using TemplateNetCore.Domain.Entities.Users;
+﻿using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using TemplateNetCore.Domain.Dto.Users;
+using TemplateNetCore.Domain.Entities.Users;
 using TemplateNetCore.Domain.Interfaces.Users;
 using TemplateNetCore.Repository;
 using TemplateNetCore.Service.Exceptions;
@@ -18,6 +20,23 @@ namespace TemplateNetCore.Service.Users
             _unityOfWork = unityOfWork;
             _hashService = hashService;
             _tokenService = tokenService;
+        }
+
+        public async Task<User> GetById(Guid id)
+        {
+            var user = await _unityOfWork.UserRepository.GetByIdAsync(id);
+
+            if (user == null)
+            {
+                throw new NotFoundException("Usuário não encontrado");
+            }
+
+            return user;
+        }
+
+        public Guid GetLoggedUserId(ClaimsPrincipal claims)
+        {
+            return _tokenService.GetIdByClaims(claims);
         }
 
         public async Task<GetLoginResponseDto> Login(PostLoginDto postLoginDto)

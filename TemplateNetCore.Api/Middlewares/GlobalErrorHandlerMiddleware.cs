@@ -29,7 +29,9 @@ namespace TemplateNetCore.Api.Middlewares
                 response.ContentType = "application/json";
                 response.StatusCode = ex is CustomException ? (ex as CustomException).StatusCode : (int)HttpStatusCode.InternalServerError;
 
-                var jsonResponse = JsonSerializer.Serialize(new { message = ex?.Message ?? "Ocorreu um erro desconhecido. Tente novamente mais tarde" });
+                var message = response.StatusCode == 500 ? "Ocorreu um erro desconhecido. Tente novamente mais tarde" : ex.Message;
+
+                var jsonResponse = JsonSerializer.Serialize(new { message });
 
                 await response.WriteAsync(jsonResponse);
             }

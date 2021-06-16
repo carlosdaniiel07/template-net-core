@@ -69,7 +69,6 @@ namespace TemplateNetCore.Api.Infraestructure.Extensions
                 };
             });
 
-
             return services;
         }
     }

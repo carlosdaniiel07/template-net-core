@@ -21,6 +21,8 @@ namespace TemplateNetCore.Repository.Interfaces
         void SoftDelete(T t);
         void AddRange(IEnumerable<T> ts);
 
+        Task<IEnumerable<T>> GetAllAsync(string[] includes);
+        Task<IEnumerable<T>> GetAllAsync(string[] includes, Expression<Func<T, bool>> expression = null);
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression = null);
         Task<IEnumerable<T>> GetAllAsync(int take, Expression<Func<T, bool>> expression = null);
         Task<IEnumerable<T>> GetAllAsync(int skip, int take, Expression<Func<T, bool>> expression = null);

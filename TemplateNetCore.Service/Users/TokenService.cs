@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-
 using TemplateNetCore.Domain.Entities.Users;
 using TemplateNetCore.Domain.Interfaces.Users;
 
@@ -39,6 +38,11 @@ namespace TemplateNetCore.Service.Users
 
             var jwtToken = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(jwtToken);
+        }
+
+        public Guid GetIdByClaims(ClaimsPrincipal claims)
+        {
+            return Guid.Parse(claims.Identity.Name);
         }
     }
 }

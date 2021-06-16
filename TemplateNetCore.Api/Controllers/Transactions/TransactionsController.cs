@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TemplateNetCore.Domain.Dto.Transactions;
 using TemplateNetCore.Domain.Entities.Transactions;
 using TemplateNetCore.Domain.Interfaces.Transactions;
+using TemplateNetCore.Domain.Interfaces.Users;
 
 namespace TemplateNetCore.Api.Controllers.Transactions
 {
@@ -15,12 +17,16 @@ namespace TemplateNetCore.Api.Controllers.Transactions
     public class TransactionsController : Controller
     {
         private readonly ITransactionService _service;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TransactionsController(ITransactionService service, IMapper mapper)
+        public TransactionsController(ITransactionService service, IUserService userService, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _service = service;
+            _userService = userService;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -33,8 +39,10 @@ namespace TemplateNetCore.Api.Controllers.Transactions
         [HttpPost]
         public async Task<ActionResult<Transaction>> Save([FromBody] PostTransactionDto postTransactionDto)
         {
-            var transaction = _mapper.Map<Transaction>(postTransactionDto);
-            return Ok(await _service.Save(transaction));
+            var userId = _userService.GetLoggedUserId(_httpContextAccessor.HttpContext.User);
+            var transaction = await _service.Save(userId, _mapper.Map<Transaction>(postTransactionDto));
+
+            return Ok(_mapper.Map<GetTransactionDto>(transaction));
         }
     }
 }
