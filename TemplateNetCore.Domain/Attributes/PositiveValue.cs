@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 
 
-namespace TemplateNetCore.Domain.Validations
+namespace TemplateNetCore.Domain.Attributes
 {
-    public class PositiveValueValidation : ValidationAttribute
+    public class PositiveValue : ValidationAttribute
     {
         public override bool IsValid(object value)
         {
