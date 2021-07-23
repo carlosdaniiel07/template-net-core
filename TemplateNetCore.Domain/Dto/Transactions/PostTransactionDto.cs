@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using TemplateNetCore.Domain.Attributes;
+using TemplateNetCore.Domain.Validations;
 
 namespace TemplateNetCore.Domain.Dto.Transactions
 {
@@ -10,7 +10,7 @@ namespace TemplateNetCore.Domain.Dto.Transactions
         [MinLength(3)]
         public string Description { get; set; }
         
-        [PositiveValue]
+        [PositiveValueValidation]
         public decimal Value { get; set; }
 
         [Required]
