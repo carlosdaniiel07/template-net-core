@@ -11,6 +11,6 @@ namespace TemplateNetCore.Domain.Interfaces.Users
         Task<User> GetById(Guid id);
         Guid GetLoggedUserId(ClaimsPrincipal claims);
         Task<GetLoginResponseDto> Login(PostLoginDto postLoginDto);
-        Task SignUp(User user);
+        Task SignUp(PostSignUpDto postSignUpDto);
     }
 }

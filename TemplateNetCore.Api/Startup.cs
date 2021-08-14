@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TemplateNetCore.Api.Infraestructure;
 using TemplateNetCore.Api.Infraestructure.Extensions;
 using TemplateNetCore.Api.Middlewares;
+using TemplateNetCore.Infra.Mapping;
 
 namespace TemplateNetCore.Api
 {

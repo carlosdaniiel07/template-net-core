@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TemplateNetCore.Domain\TemplateNetCore.Domain.csproj" />
+    <ProjectReference Include="..\TemplateNetCore.Infra\TemplateNetCore.Infra.csproj" />
     <ProjectReference Include="..\TemplateNetCore.Repository\TemplateNetCore.Repository.csproj" />
   </ItemGroup>
 

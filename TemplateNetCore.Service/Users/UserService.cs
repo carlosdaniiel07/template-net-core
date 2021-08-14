@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TemplateNetCore.Domain.Dto.Users;
@@ -12,12 +13,14 @@ namespace TemplateNetCore.Service.Users
     public class UserService : IUserService
     {
         private readonly IUnityOfWork _unityOfWork;
+        private readonly IMapper _mapper;
         private readonly IHashService _hashService;
         private readonly ITokenService _tokenService;
 
-        public UserService(IUnityOfWork unityOfWork, IHashService hashService, ITokenService tokenService)
+        public UserService(IUnityOfWork unityOfWork, IMapper mapper, IHashService hashService, ITokenService tokenService)
         {
             _unityOfWork = unityOfWork;
+            _mapper = mapper;
             _hashService = hashService;
             _tokenService = tokenService;
         }
@@ -55,8 +58,9 @@ namespace TemplateNetCore.Service.Users
             };
         }
 
-        public async Task SignUp(User user)
+        public async Task SignUp(PostSignUpDto postSignUpDto)
         {
+            var user = _mapper.Map<User>(postSignUpDto);
             var emailExists = await _unityOfWork.UserRepository.AnyAsync(user => user.Email == user.Email);
 
             if (emailExists)

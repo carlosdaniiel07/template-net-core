@@ -1,8 +1,6 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using TemplateNetCore.Domain.Dto.Users;
-using TemplateNetCore.Domain.Entities.Users;
 using TemplateNetCore.Domain.Interfaces.Users;
 
 namespace TemplateNetCore.Api.Controllers.Users
@@ -12,18 +10,16 @@ namespace TemplateNetCore.Api.Controllers.Users
     public class UsersController : ControllerBase
     {
         private readonly IUserService _service;
-        private readonly IMapper _mapper;
 
-        public UsersController(IUserService service, IMapper mapper)
+        public UsersController(IUserService service)
         {
             _service = service;
-            _mapper = mapper;
         }
 
         [HttpPost("signup")]
-        public async Task<ActionResult> SignUp([FromBody] PostSignUpDto signUpDto)
+        public async Task<ActionResult> SignUp([FromBody] PostSignUpDto postSignUpDto)
         {
-            await _service.SignUp(_mapper.Map<User>(signUpDto));
+            await _service.SignUp(postSignUpDto);
             return Ok();
         }
 

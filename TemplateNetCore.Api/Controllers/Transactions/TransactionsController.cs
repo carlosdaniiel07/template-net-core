@@ -40,7 +40,7 @@ namespace TemplateNetCore.Api.Controllers.Transactions
         public async Task<ActionResult<Transaction>> Save([FromBody] PostTransactionDto postTransactionDto)
         {
             var userId = _userService.GetLoggedUserId(_httpContextAccessor.HttpContext.User);
-            var transaction = await _service.Save(userId, _mapper.Map<Transaction>(postTransactionDto));
+            var transaction = await _service.Save(userId, postTransactionDto);
 
             return Ok(_mapper.Map<GetTransactionDto>(transaction));
         }

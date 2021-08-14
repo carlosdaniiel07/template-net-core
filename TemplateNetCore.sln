@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Api", "TemplateNetCore.Api\TemplateNetCore.Api.csproj", "{064B609B-52B9-4FAC-A049-95F213155016}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Api", "TemplateNetCore.Api\TemplateNetCore.Api.csproj", "{064B609B-52B9-4FAC-A049-95F213155016}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Domain", "TemplateNetCore.Domain\TemplateNetCore.Domain.csproj", "{DD42B28E-EC35-4592-BE6C-17183095DA7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Domain", "TemplateNetCore.Domain\TemplateNetCore.Domain.csproj", "{DD42B28E-EC35-4592-BE6C-17183095DA7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Service", "TemplateNetCore.Service\TemplateNetCore.Service.csproj", "{CB9E4684-876F-4847-B60E-A19C6D4ACA8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Service", "TemplateNetCore.Service\TemplateNetCore.Service.csproj", "{CB9E4684-876F-4847-B60E-A19C6D4ACA8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Repository", "TemplateNetCore.Repository\TemplateNetCore.Repository.csproj", "{78F1FC09-FA8F-4B75-A35F-789A77CC970D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Repository", "TemplateNetCore.Repository\TemplateNetCore.Repository.csproj", "{78F1FC09-FA8F-4B75-A35F-789A77CC970D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Repository.EF", "TemplateNetCore.Repository.EF\TemplateNetCore.Repository.EF.csproj", "{A38F1FE4-10BD-4694-9653-D56350606C6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Repository.EF", "TemplateNetCore.Repository.EF\TemplateNetCore.Repository.EF.csproj", "{A38F1FE4-10BD-4694-9653-D56350606C6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Infra", "TemplateNetCore.Infra\TemplateNetCore.Infra.csproj", "{191F4D62-4D6E-49E8-A8FD-442B5CDEDDAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A38F1FE4-10BD-4694-9653-D56350606C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A38F1FE4-10BD-4694-9653-D56350606C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A38F1FE4-10BD-4694-9653-D56350606C6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{191F4D62-4D6E-49E8-A8FD-442B5CDEDDAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{191F4D62-4D6E-49E8-A8FD-442B5CDEDDAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{191F4D62-4D6E-49E8-A8FD-442B5CDEDDAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{191F4D62-4D6E-49E8-A8FD-442B5CDEDDAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

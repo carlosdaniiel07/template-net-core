@@ -4,7 +4,7 @@ using TemplateNetCore.Domain.Dto.Users;
 using TemplateNetCore.Domain.Entities.Transactions;
 using TemplateNetCore.Domain.Entities.Users;
 
-namespace TemplateNetCore.Api.Infraestructure
+namespace TemplateNetCore.Infra.Mapping
 {
     public class AutoMapping : Profile
     {
