@@ -63,7 +63,7 @@ namespace TemplateNetCore.Repository.EF.Repositories
 
         public void SoftDelete(T t)
         {
-            t.DeletedAt = DateTime.Now;
+            t.DeletedAt = DateTime.UtcNow;
             dbSet.Update(t);
         }
 
