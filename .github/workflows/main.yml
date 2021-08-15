@@ -22,5 +22,8 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release
 
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
+
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/dist
