@@ -10,6 +10,6 @@ namespace TemplateNetCore.Domain.Interfaces.Users
         Task<User> GetById(Guid id);
         Guid GetLoggedUserId();
         Task<GetLoginResponseDto> Login(PostLoginDto postLoginDto);
-        Task SignUp(PostSignUpDto postSignUpDto);
+        Task<User> SignUp(PostSignUpDto postSignUpDto);
     }
 }

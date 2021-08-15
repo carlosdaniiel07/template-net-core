@@ -61,7 +61,7 @@ namespace TemplateNetCore.Service.Users
             };
         }
 
-        public async Task SignUp(PostSignUpDto postSignUpDto)
+        public async Task<User> SignUp(PostSignUpDto postSignUpDto)
         {
             var user = _mapper.Map<User>(postSignUpDto);
             var emailExists = await _unityOfWork.UserRepository.AnyAsync(user => user.Email == user.Email);
@@ -77,6 +77,8 @@ namespace TemplateNetCore.Service.Users
 
             await _unityOfWork.UserRepository.AddAsync(user);
             await _unityOfWork.CommitAsync();
+
+            return user;
         }
     }
 }

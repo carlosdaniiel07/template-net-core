@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Repository.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Infra", "TemplateNetCore.Infra\TemplateNetCore.Infra.csproj", "{191F4D62-4D6E-49E8-A8FD-442B5CDEDDAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateNetCore.Tests", "TemplateNetCore.Tests\TemplateNetCore.Tests.csproj", "{0C5CC640-6FA3-4BE9-8191-B6E4FD7767F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{191F4D62-4D6E-49E8-A8FD-442B5CDEDDAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{191F4D62-4D6E-49E8-A8FD-442B5CDEDDAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{191F4D62-4D6E-49E8-A8FD-442B5CDEDDAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C5CC640-6FA3-4BE9-8191-B6E4FD7767F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C5CC640-6FA3-4BE9-8191-B6E4FD7767F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C5CC640-6FA3-4BE9-8191-B6E4FD7767F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C5CC640-6FA3-4BE9-8191-B6E4FD7767F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
