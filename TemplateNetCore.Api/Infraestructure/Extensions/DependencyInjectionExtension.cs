@@ -1,18 +1,13 @@
 ﻿using System.Text;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-
 using TemplateNetCore.Domain.Interfaces.Transactions;
 using TemplateNetCore.Domain.Interfaces.Users;
-
 using TemplateNetCore.Service.Transactions;
 using TemplateNetCore.Service.Users;
-
 using TemplateNetCore.Repository;
 using TemplateNetCore.Repository.Interfaces;
-
 using TemplateNetCore.Repository.EF;
 using TemplateNetCore.Repository.EF.Repositories;
 
@@ -58,7 +53,7 @@ namespace TemplateNetCore.Api.Infraestructure.Extensions
             })
             .AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = false;
+                options.RequireHttpsMetadata = true;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
