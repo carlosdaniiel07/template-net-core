@@ -20,6 +20,9 @@ namespace TemplateNetCore.Repository.EF.Configurations
                 .HasColumnName("created_at")
                 .IsRequired();
 
+            builder.Property(entity => entity.UpdatedAt)
+                .HasColumnName("updated_at");
+
             builder.Property(entity => entity.DeletedAt)
                 .HasColumnName("deleted_at");
         }
