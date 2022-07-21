@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using TemplateNetCore.Domain.Entities;
 using TemplateNetCore.Repository.Interfaces;
 
@@ -20,25 +16,25 @@ namespace TemplateNetCore.Repository.EF.Repositories
             dbSet = context.Set<T>();
         }
 
-        public void Add(T t)
+        public void Add(T entity)
         {
-            dbSet.Add(t);
+            dbSet.Add(entity);
         }
 
-        public async Task AddAsync(T t)
+        public async Task AddAsync(T entity)
         {
-            await dbSet.AddAsync(t);
+            await dbSet.AddAsync(entity);
         }
 
-        public void AddRange(IEnumerable<T> ts)
+        public void AddRange(IEnumerable<T> entities)
         {
-            dbSet.AddRange(ts);
+            dbSet.AddRange(entities);
         }
 
-        public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> ts)
+        public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities)
         {
-            await dbSet.AddRangeAsync(ts);
-            return ts;
+            await dbSet.AddRangeAsync(entities);
+            return entities;
         }
 
         public bool Any(Expression<Func<T, bool>> expression = null)
@@ -51,20 +47,15 @@ namespace TemplateNetCore.Repository.EF.Repositories
             return await dbSet.AnyAsync(expression);
         }
 
-        public void Delete(T t)
+        public void Delete(T entity)
         {
-            dbSet.Remove(t);
+            dbSet.Remove(entity);
         }
 
-        public Task DeleteAsync(T t)
+        public void SoftDelete(T entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public void SoftDelete(T t)
-        {
-            t.DeletedAt = DateTime.UtcNow;
-            dbSet.Update(t);
+            entity.DeletedAt = DateTime.UtcNow;
+            dbSet.Update(entity);
         }
 
         public T Get(Expression<Func<T, bool>> expression = null)
@@ -210,14 +201,10 @@ namespace TemplateNetCore.Repository.EF.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public void Update(T t)
+        public void Update(T entity)
         {
-            dbSet.Update(t);
-        }
-
-        public Task UpdateAsync(T t)
-        {
-            throw new NotImplementedException();
+            entity.UpdatedAt = DateTime.UtcNow;
+            dbSet.Update(entity);
         }
     }
 }
