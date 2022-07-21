@@ -2,18 +2,19 @@
 using TemplateNetCore.Repository.Interfaces.Users;
 using TemplateNetCore.Repository.EF.Repositories.Transactions;
 using TemplateNetCore.Repository.EF.Repositories.Users;
+using TemplateNetCore.Repository.Interfaces;
 
 namespace TemplateNetCore.Repository.EF
 {
     public class UnityOfWork : IUnityOfWork
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
         private TransactionRepository _transactionRepository;
         private UserRepository _userRepository;
 
         public UnityOfWork(ApplicationDbContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
         public ITransactionRepository TransactionRepository
@@ -21,7 +22,7 @@ namespace TemplateNetCore.Repository.EF
             get
             {
                 if (_transactionRepository == null)
-                    _transactionRepository = new TransactionRepository(context);
+                    _transactionRepository = new TransactionRepository(_context);
 
                 return _transactionRepository;
             }
@@ -32,20 +33,19 @@ namespace TemplateNetCore.Repository.EF
             get
             {
                 if (_userRepository == null)
-                    _userRepository = new UserRepository(context);
+                    _userRepository = new UserRepository(_context);
 
                 return _userRepository;
             }
         }
 
-        public void Commit()
-        {
-            context.SaveChanges();
-        }
+        public void Commit() =>
+            _context.SaveChanges();
 
-        public async Task CommitAsync()
-        {
-            await context.SaveChangesAsync();
-        }
+        public async Task CommitAsync() =>
+            await _context.SaveChangesAsync();
+
+        public IDatabaseTransaction BeginTransaction() =>
+            new DatabaseTransaction(_context);
     }
 }

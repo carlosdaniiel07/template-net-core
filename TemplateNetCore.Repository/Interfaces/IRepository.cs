@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-
+﻿using System.Linq.Expressions;
 using TemplateNetCore.Domain.Entities;
 
 namespace TemplateNetCore.Repository.Interfaces
@@ -20,7 +16,6 @@ namespace TemplateNetCore.Repository.Interfaces
         void Delete(T t);
         void SoftDelete(T t);
         void AddRange(IEnumerable<T> ts);
-
         Task<IEnumerable<T>> GetAllAsync(string[] includes);
         Task<IEnumerable<T>> GetAllAsync(string[] includes, Expression<Func<T, bool>> expression = null);
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression = null);
