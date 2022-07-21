@@ -5,13 +5,13 @@ using TemplateNetCore.Repository.EF.Repositories.Users;
 
 namespace TemplateNetCore.Repository.EF
 {
-    public class UnitOfWork : IUnityOfWork
+    public class UnityOfWork : IUnityOfWork
     {
         private readonly ApplicationDbContext context;
         private TransactionRepository _transactionRepository;
         private UserRepository _userRepository;
 
-        public UnitOfWork(ApplicationDbContext context)
+        public UnityOfWork(ApplicationDbContext context)
         {
             this.context = context;
         }

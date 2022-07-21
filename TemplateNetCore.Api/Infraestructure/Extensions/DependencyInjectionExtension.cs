@@ -23,7 +23,7 @@ namespace TemplateNetCore.Api.Infraestructure.Extensions
         public static IServiceCollection AddScopedServices(this IServiceCollection services)
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IUnityOfWork, UnitOfWork>();
+            services.AddScoped<IUnityOfWork, UnityOfWork>();
 
             return services;
         }
