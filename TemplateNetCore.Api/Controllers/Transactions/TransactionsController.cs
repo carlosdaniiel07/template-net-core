@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using TemplateNetCore.Domain.Dto.Transactions;
 using TemplateNetCore.Domain.Entities.Transactions;
 using TemplateNetCore.Domain.Interfaces.Transactions;
@@ -14,7 +11,7 @@ namespace TemplateNetCore.Api.Controllers.Transactions
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class TransactionsController : Controller
+    public class TransactionsController : ControllerBase
     {
         private readonly ITransactionService _service;
         private readonly IUserService _userService;

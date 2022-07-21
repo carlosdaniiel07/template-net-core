@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using TemplateNetCore.Domain.Dto.Users;
 using TemplateNetCore.Domain.Interfaces.Users;
 
