@@ -10,40 +10,30 @@ namespace TemplateNetCore.Repository.EF.Configurations.Transactions
         {
             base.Configure(builder);
 
-            builder.ToTable("transaction");
+            builder.ToTable("Transactions");
 
             builder.Property(entity => entity.Description)
-                .HasColumnName("description")
                 .HasMaxLength(100);
 
             builder.Property(entity => entity.Value)
-                .HasColumnName("value")
-                .HasColumnType("decimal(11,2)")
-                .IsRequired();
+                .HasColumnType("decimal(19,2)");
 
             builder.Property(entity => entity.TargetKey)
-                .HasColumnName("target_key")
                 .HasMaxLength(20)
                 .IsRequired();
 
-            builder.Property(entity => entity.Date)
-                .HasColumnName("date")
-                .IsRequired();
+            builder.Property(entity => entity.Date);
 
-            builder.Property(entity => entity.Status)
-                .HasColumnName("status")
-                .IsRequired();
+            builder.Property(entity => entity.Status);
 
-            builder.Property(entity => entity.UserId)
-                .HasColumnName("user_id")
-                .IsRequired();
+            builder.Property(entity => entity.UserId);
 
             builder.HasOne(entity => entity.User)
                 .WithMany()
                 .HasForeignKey(entity => entity.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_transaction_user");
+                .HasConstraintName("FK_Transactions_Users");
         }
     }
 }

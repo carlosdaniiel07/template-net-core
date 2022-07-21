@@ -13,18 +13,10 @@ namespace TemplateNetCore.Repository.EF.Configurations
 
             builder.HasQueryFilter(entity => entity.DeletedAt == null);
 
-            builder.Property(entity => entity.Id)
-                .HasColumnName("id");
-
-            builder.Property(entity => entity.CreatedAt)
-                .HasColumnName("created_at")
-                .IsRequired();
-
-            builder.Property(entity => entity.UpdatedAt)
-                .HasColumnName("updated_at");
-
-            builder.Property(entity => entity.DeletedAt)
-                .HasColumnName("deleted_at");
+            builder.Property(entity => entity.Id);
+            builder.Property(entity => entity.CreatedAt);
+            builder.Property(entity => entity.UpdatedAt);
+            builder.Property(entity => entity.DeletedAt);
         }
     }
 }

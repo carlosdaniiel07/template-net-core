@@ -10,36 +10,29 @@ namespace TemplateNetCore.Repository.EF.Configurations.Users
         {
             base.Configure(builder);
 
-            builder.ToTable("user");
+            builder.ToTable("Users");
 
             builder.HasIndex(entity => entity.Email)
-                .IsUnique();
+                .IsUnique()
+                .HasDatabaseName("Users_UQ_Email");
 
             builder.Property(entity => entity.Name)
-                .HasColumnName("name")
                 .IsRequired()
                 .HasMaxLength(50);
 
             builder.Property(entity => entity.Email)
-                .HasColumnName("email")
                 .IsRequired()
                 .HasMaxLength(100);
 
             builder.Property(entity => entity.Password)
-                .HasColumnName("password")
                 .IsRequired()
                 .HasMaxLength(255);
 
-            builder.Property(entity => entity.Role)
-                .HasColumnName("role")
-                .IsRequired();
+            builder.Property(entity => entity.Role);
+            
+            builder.Property(entity => entity.LastLogin);
 
-            builder.Property(entity => entity.LastLogin)
-                .HasColumnName("last_login");
-
-            builder.Property(entity => entity.IsActive)
-                .HasColumnName("is_active")
-                .IsRequired();
+            builder.Property(entity => entity.IsActive);
         }
     }
 }
