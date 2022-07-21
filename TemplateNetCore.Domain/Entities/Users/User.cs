@@ -1,6 +1,4 @@
-﻿using System;
-
-using TemplateNetCore.Domain.Enums.Users;
+﻿using TemplateNetCore.Domain.Enums.Users;
 
 namespace TemplateNetCore.Domain.Entities.Users
 {

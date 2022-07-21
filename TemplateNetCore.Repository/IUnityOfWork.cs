@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-using TemplateNetCore.Repository.Interfaces.Transactions;
+﻿using TemplateNetCore.Repository.Interfaces.Transactions;
 using TemplateNetCore.Repository.Interfaces.Users;
 
 namespace TemplateNetCore.Repository
@@ -9,7 +7,6 @@ namespace TemplateNetCore.Repository
     {
         ITransactionRepository TransactionRepository { get; }
         IUserRepository UserRepository { get; }
-        
         void Commit();
         Task CommitAsync();
     }

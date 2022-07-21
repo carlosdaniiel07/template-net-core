@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using TemplateNetCore.Domain.Entities.Users;
 
 namespace TemplateNetCore.Domain.Interfaces.Users

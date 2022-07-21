@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 using TemplateNetCore.Domain.Entities.Transactions;
 
 namespace TemplateNetCore.Repository.EF.Configurations.Transactions

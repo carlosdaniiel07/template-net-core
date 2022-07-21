@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TemplateNetCore.Domain.Dto.Transactions;
+﻿using TemplateNetCore.Domain.Dto.Transactions;
 using TemplateNetCore.Domain.Entities.Transactions;
 
 namespace TemplateNetCore.Domain.Interfaces.Transactions

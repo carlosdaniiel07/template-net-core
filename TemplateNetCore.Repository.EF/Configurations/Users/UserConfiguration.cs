@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 using TemplateNetCore.Domain.Entities.Users;
 
 namespace TemplateNetCore.Repository.EF.Configurations.Users

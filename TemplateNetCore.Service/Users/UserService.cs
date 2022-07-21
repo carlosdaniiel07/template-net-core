@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Threading.Tasks;
 using TemplateNetCore.Domain.Dto.Users;
 using TemplateNetCore.Domain.Entities.Users;
 using TemplateNetCore.Domain.Interfaces.Users;

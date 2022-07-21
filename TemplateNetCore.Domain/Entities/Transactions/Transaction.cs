@@ -1,5 +1,4 @@
-﻿using System;
-using TemplateNetCore.Domain.Entities.Users;
+﻿using TemplateNetCore.Domain.Entities.Users;
 using TemplateNetCore.Domain.Enums.Transactions;
 
 namespace TemplateNetCore.Domain.Entities.Transactions

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TemplateNetCore.Service.Exceptions
+﻿namespace TemplateNetCore.Service.Exceptions
 {
     public abstract class CustomException : Exception
     {

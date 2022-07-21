@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using TemplateNetCore.Domain.Dto.Users;
+﻿using TemplateNetCore.Domain.Dto.Users;
 using TemplateNetCore.Domain.Entities.Users;
 
 namespace TemplateNetCore.Domain.Interfaces.Users
