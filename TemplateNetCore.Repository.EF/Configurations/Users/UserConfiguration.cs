@@ -29,8 +29,6 @@ namespace TemplateNetCore.Repository.EF.Configurations.Users
                 .HasMaxLength(255);
 
             builder.Property(entity => entity.Role);
-            
-            builder.Property(entity => entity.LastLogin);
 
             builder.Property(entity => entity.IsActive);
         }

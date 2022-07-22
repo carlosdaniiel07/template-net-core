@@ -26,7 +26,7 @@
     <ProjectReference Include="..\TemplateNetCore.Domain\TemplateNetCore.Domain.csproj" />
     <ProjectReference Include="..\TemplateNetCore.Infra\TemplateNetCore.Infra.csproj" />
     <ProjectReference Include="..\TemplateNetCore.Repository\TemplateNetCore.Repository.csproj" />
-    <ProjectReference Include="..\TemplateNetCore.Service\TemplateNetCore.Service.csproj" />
+    <ProjectReference Include="..\TemplateNetCore.Application\TemplateNetCore.Application.csproj" />
   </ItemGroup>
 
 </Project>

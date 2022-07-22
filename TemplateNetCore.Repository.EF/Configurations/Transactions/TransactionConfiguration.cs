@@ -18,12 +18,6 @@ namespace TemplateNetCore.Repository.EF.Configurations.Transactions
             builder.Property(entity => entity.Value)
                 .HasColumnType("decimal(19,2)");
 
-            builder.Property(entity => entity.TargetKey)
-                .HasMaxLength(20)
-                .IsRequired();
-
-            builder.Property(entity => entity.Date);
-
             builder.Property(entity => entity.Status);
 
             builder.Property(entity => entity.UserId);

@@ -1,13 +1,13 @@
-﻿using TemplateNetCore.Domain.Dto.Users;
+﻿using TemplateNetCore.Domain.Commands.SignIn;
+using TemplateNetCore.Domain.Commands.SignUp;
 using TemplateNetCore.Domain.Entities.Users;
 
 namespace TemplateNetCore.Domain.Interfaces.Users
 {
     public interface IUserService
     {
-        Task<User> GetById(Guid id);
-        Guid GetLoggedUserId();
-        Task<GetLoginResponseDto> Login(PostLoginDto postLoginDto);
-        Task<User> SignUp(PostSignUpDto postSignUpDto);
+        Task<User> SignUpAsync(SignUpCommand command);
+        Task<string> SignInAsync(SignInCommand command);
+        Task<User> GetLoggedUserAsync();
     }
 }

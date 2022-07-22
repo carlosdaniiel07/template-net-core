@@ -1,5 +1,6 @@
 using TemplateNetCore.Api.Infraestructure.Extensions;
 using TemplateNetCore.Api.Middlewares;
+using TemplateNetCore.Domain.Models;
 using TemplateNetCore.Infra.Mapping;
 
 namespace TemplateNetCore.Api
@@ -16,14 +17,19 @@ namespace TemplateNetCore.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext(Configuration.GetConnectionString("Local"));
-            services.AddScopedServices();
-            services.AddTransientServices();
+            services
+                .AddDbContext(Configuration.GetConnectionString("Local"))
+                .AddScopedServices()
+                .AddTransientServices()
+                .AddSingletonServices()
+                .AddMediator()
+                .AddAuthenticationJwt(Configuration)
+                .AddSwagger()
+                .AddAutoMapper(config => config.AddProfile<AutoMapping>(), typeof(Startup))
+                .Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
+
             services.AddHttpContextAccessor();
             services.AddControllers();
-            services.AddAuthenticationJwt(Configuration.GetSection("Settings").GetValue<string>("JwtSecret"));
-            services.AddSwagger();
-            services.AddAutoMapper(config => config.AddProfile<AutoMapping>(), typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,9 +41,9 @@ namespace TemplateNetCore.Api
             }
 
             app.UseHttpsRedirection();
-            
+
             app.UseRouting();
-            
+
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthentication();

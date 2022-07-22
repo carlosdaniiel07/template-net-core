@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Api", "Temp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Domain", "TemplateNetCore.Domain\TemplateNetCore.Domain.csproj", "{DD42B28E-EC35-4592-BE6C-17183095DA7F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Service", "TemplateNetCore.Service\TemplateNetCore.Service.csproj", "{CB9E4684-876F-4847-B60E-A19C6D4ACA8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Application", "TemplateNetCore.Application\TemplateNetCore.Application.csproj", "{CB9E4684-876F-4847-B60E-A19C6D4ACA8D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Repository", "TemplateNetCore.Repository\TemplateNetCore.Repository.csproj", "{78F1FC09-FA8F-4B75-A35F-789A77CC970D}"
 EndProject

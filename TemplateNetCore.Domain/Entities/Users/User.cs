@@ -8,7 +8,13 @@ namespace TemplateNetCore.Domain.Entities.Users
         public string Email { get; set; }
         public string Password { get; set; }
         public UserRole Role { get; set; }
-        public DateTime? LastLogin { get; set; }
         public bool IsActive { get; set; }
+
+        public void Create(string passwordHash)
+        {
+            Password = passwordHash;
+            Role = UserRole.Default;
+            IsActive = true;
+        }
     }
 }

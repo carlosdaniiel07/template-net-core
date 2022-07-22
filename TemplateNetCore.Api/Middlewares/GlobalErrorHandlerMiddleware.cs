@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 
-using TemplateNetCore.Service.Exceptions;
+using TemplateNetCore.Application.Exceptions;
 
 namespace TemplateNetCore.Api.Middlewares
 {

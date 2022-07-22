@@ -14,7 +14,7 @@ COPY ["TemplateNetCore.Domain/TemplateNetCore.Domain.csproj", "TemplateNetCore.D
 COPY ["TemplateNetCore.Infra/TemplateNetCore.Infra.csproj", "TemplateNetCore.Infra/"]
 COPY ["TemplateNetCore.Repository/TemplateNetCore.Repository.csproj", "TemplateNetCore.Repository/"]
 COPY ["TemplateNetCore.Repository.EF/TemplateNetCore.Repository.EF.csproj", "TemplateNetCore.Repository.EF/"]
-COPY ["TemplateNetCore.Service/TemplateNetCore.Service.csproj", "TemplateNetCore.Service/"]
+COPY ["TemplateNetCore.Application/TemplateNetCore.Application.csproj", "TemplateNetCore.Application/"]
 
 RUN dotnet restore "TemplateNetCore.Api/TemplateNetCore.Api.csproj"
 

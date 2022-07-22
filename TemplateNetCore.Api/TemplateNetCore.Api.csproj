@@ -4,12 +4,13 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\TemplateNetCore.Domain\TemplateNetCore.Domain.csproj"/>
-		<ProjectReference Include="..\TemplateNetCore.Repository.EF\TemplateNetCore.Repository.EF.csproj"/>
-		<ProjectReference Include="..\TemplateNetCore.Repository\TemplateNetCore.Repository.csproj"/>
-		<ProjectReference Include="..\TemplateNetCore.Service\TemplateNetCore.Service.csproj"/>
+		<ProjectReference Include="..\TemplateNetCore.Domain\TemplateNetCore.Domain.csproj" />
+		<ProjectReference Include="..\TemplateNetCore.Repository.EF\TemplateNetCore.Repository.EF.csproj" />
+		<ProjectReference Include="..\TemplateNetCore.Repository\TemplateNetCore.Repository.csproj" />
+		<ProjectReference Include="..\TemplateNetCore.Application\TemplateNetCore.Application.csproj" />
 	</ItemGroup>
 </Project>
