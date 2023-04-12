@@ -1,12 +1,31 @@
-using TemplateNetCore.Api;
+using TemplateNetCore.Api.Infraestructure;
+using TemplateNetCore.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
-var startup = new Startup(builder.Configuration);
 
-startup.ConfigureServices(builder.Services);
+builder.Configure();
 
 var app = builder.Build();
 
-startup.Configure(app, app.Environment);
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Template .NET Core");
+});
+app.UseMiddleware<GlobalErrorHandlerMiddleware>();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

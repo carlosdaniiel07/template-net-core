@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
-
-using TemplateNetCore.Application.Exceptions;
+using TemplateNetCore.Domain.Exceptions;
 
 namespace TemplateNetCore.Api.Middlewares
 {
@@ -21,14 +20,15 @@ namespace TemplateNetCore.Api.Middlewares
             try
             {
                 await _next(context);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 var response = context.Response;
                 
                 response.ContentType = "application/json";
-                response.StatusCode = ex is CustomException ? (ex as CustomException).StatusCode : (int)HttpStatusCode.InternalServerError;
+                response.StatusCode = ex is BaseException ? (ex as BaseException).StatusCode : (int)HttpStatusCode.InternalServerError;
 
-                var message = response.StatusCode == 500 ? "Ocorreu um erro desconhecido. Tente novamente mais tarde" : ex.Message;
+                var message = response.StatusCode == 500 ? "An unknown error has occurred. Try again later" : ex.Message;
                 var jsonResponse = JsonSerializer.Serialize(new { message });
 
                 _logger.LogError(ex, message);
