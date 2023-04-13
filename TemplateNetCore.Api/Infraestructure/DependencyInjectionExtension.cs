@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TemplateNetCore.Api.Filters;
@@ -11,14 +12,34 @@ namespace TemplateNetCore.Api.Infraestructure
     {
         public static void Configure(this WebApplicationBuilder builder)
         {
-            builder.Services.ConfigureBaseServices();
+            builder.Services.ConfigureBaseServices(builder.Configuration);
 
+            AddControllers(builder.Services);
+            AddSwagger(builder.Services);
             AddAuthenticationJwt(builder.Services, builder.Configuration);
-            
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddControllers(config =>
+        }
+
+        private static void AddControllers(IServiceCollection services)
+        {
+            services.AddControllers(config =>
             {
                 config.Filters.Add<NotificationFilter>();
+            });
+        }
+
+        private static void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(config =>
+            {
+                config.TagActionsBy(api =>
+                {
+                    if (api.GroupName != null)
+                        return new string[] { api.GroupName };
+
+                    return new string[] { (api.ActionDescriptor as ControllerActionDescriptor).ControllerName };
+                });
+
+                config.DocInclusionPredicate((name, api) => true);
             });
         }
 

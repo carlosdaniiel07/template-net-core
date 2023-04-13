@@ -6,7 +6,7 @@ namespace TemplateNetCore.Domain.Interfaces.Repositories
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity> GetByIdAsync(Guid id);
-        Task<TEntity> SaveAsync(TEntity entity);
+        Task<TEntity> AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
     }

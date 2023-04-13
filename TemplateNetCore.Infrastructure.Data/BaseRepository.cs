@@ -28,7 +28,7 @@ namespace TemplateNetCore.Infrastructure.Data
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<TEntity> SaveAsync(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
             await dbSet.AddAsync(entity);
             return entity;
