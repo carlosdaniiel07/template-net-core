@@ -10,11 +10,11 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
 COPY ["TemplateNetCore.Api/TemplateNetCore.Api.csproj", "TemplateNetCore.Api/"]
-COPY ["TemplateNetCore.Domain/TemplateNetCore.Domain.csproj", "TemplateNetCore.Domain/"]
-COPY ["TemplateNetCore.Infra/TemplateNetCore.Infra.csproj", "TemplateNetCore.Infra/"]
-COPY ["TemplateNetCore.Repository/TemplateNetCore.Repository.csproj", "TemplateNetCore.Repository/"]
-COPY ["TemplateNetCore.Repository.EF/TemplateNetCore.Repository.EF.csproj", "TemplateNetCore.Repository.EF/"]
 COPY ["TemplateNetCore.Application/TemplateNetCore.Application.csproj", "TemplateNetCore.Application/"]
+COPY ["TemplateNetCore.Domain/TemplateNetCore.Domain.csproj", "TemplateNetCore.Domain/"]
+COPY ["TemplateNetCore.Infrastructure.Data/TemplateNetCore.Infrastructure.Data.csproj", "TemplateNetCore.Infrastructure.Data/"]
+COPY ["TemplateNetCore.Infrastructure.IoC/TemplateNetCore.Infrastructure.IoC.csproj", "TemplateNetCore.Infrastructure.IoC/"]
+COPY ["TemplateNetCore.Infrastructure.Service/TemplateNetCore.Infrastructure.Service.csproj", "TemplateNetCore.Infrastructure.Service/"]
 
 RUN dotnet restore "TemplateNetCore.Api/TemplateNetCore.Api.csproj"
 
