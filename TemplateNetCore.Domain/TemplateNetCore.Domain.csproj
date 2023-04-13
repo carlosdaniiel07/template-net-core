@@ -3,12 +3,12 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
-	  <ImplicitUsings>enable</ImplicitUsings>
+	<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.1.0" />
-    <PackageReference Include="MediatR" Version="10.0.1" />
+    <Folder Include="Enums\v1\" />
+    <Folder Include="Exceptions\v1\" />
   </ItemGroup>
 
 </Project>
