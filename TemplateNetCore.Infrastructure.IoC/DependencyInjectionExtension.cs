@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TemplateNetCore.Application.Services.v1;
-using TemplateNetCore.Application.UseCases;
 using TemplateNetCore.Application.UseCases.v1.Auth.SignIn;
 using TemplateNetCore.Application.UseCases.v1.Auth.SignUp;
 using TemplateNetCore.Domain.Interfaces.Repositories;
@@ -58,7 +57,7 @@ namespace TemplateNetCore.Infrastructure.IoC
 
         private static void AddConfigurationModels(IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            services.Configure<JwtSettings>(options => configuration.GetSection("JwtSettings").Bind(options));
         }
     }
 }
