@@ -16,7 +16,7 @@ Template base para criação de projetos back-end com ASP.NET Core 6.x
 ## 🚀 Tecnologias
 
 - C#
-- NET Core 6
+- .NET Core 6
 - Entity Framework Core
 - AutoMapper
 - BCrypt
