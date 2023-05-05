@@ -16,7 +16,7 @@
     <ProjectReference Include="..\TemplateNetCore.Application\TemplateNetCore.Application.csproj" />
     <ProjectReference Include="..\TemplateNetCore.Domain\TemplateNetCore.Domain.csproj" />
     <ProjectReference Include="..\TemplateNetCore.Infrastructure.Data.MongoDb\TemplateNetCore.Infrastructure.Data.MongoDb.csproj" />
-    <ProjectReference Include="..\TemplateNetCore.Infrastructure.Data\TemplateNetCore.Infrastructure.Data.Sql.csproj" />
+    <ProjectReference Include="..\TemplateNetCore.Infrastructure.Data.Sql\TemplateNetCore.Infrastructure.Data.Sql.csproj" />
     <ProjectReference Include="..\TemplateNetCore.Infrastructure.Service\TemplateNetCore.Infrastructure.Service.csproj" />
   </ItemGroup>
 

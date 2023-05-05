@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Infrastruct
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Infrastructure.Service", "TemplateNetCore.Infrastructure.Service\TemplateNetCore.Infrastructure.Service.csproj", "{90A2B4B7-C195-4E8D-86AA-B1962593AE4B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Infrastructure.Data.Sql", "TemplateNetCore.Infrastructure.Data\TemplateNetCore.Infrastructure.Data.Sql.csproj", "{990CE550-1078-46C7-804D-D6F498DF7B15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Infrastructure.Data.Sql", "TemplateNetCore.Infrastructure.Data.Sql\TemplateNetCore.Infrastructure.Data.Sql.csproj", "{990CE550-1078-46C7-804D-D6F498DF7B15}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateNetCore.Infrastructure.Data.MongoDb", "TemplateNetCore.Infrastructure.Data.MongoDb\TemplateNetCore.Infrastructure.Data.MongoDb.csproj", "{1BE30FDF-54FD-45B3-9A24-BB434476AD8D}"
 EndProject
