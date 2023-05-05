@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TemplateNetCore.Domain.Entities.v1;
-using TemplateNetCore.Domain.Interfaces.Repositories.v1;
+using TemplateNetCore.Domain.Interfaces.Repositories.Sql.v1;
+using TemplateNetCore.Infrastructure.Data.Sql.Repositories;
 
 namespace TemplateNetCore.Infrastructure.Data.Repositories.v1
 {

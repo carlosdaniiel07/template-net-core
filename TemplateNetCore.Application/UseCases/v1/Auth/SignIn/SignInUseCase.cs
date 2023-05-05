@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using TemplateNetCore.Domain.Interfaces.Repositories;
+using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 using TemplateNetCore.Domain.UseCases.v1.Auth.SignIn;
 

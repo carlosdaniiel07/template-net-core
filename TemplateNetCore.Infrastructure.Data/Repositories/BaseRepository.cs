@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TemplateNetCore.Domain.Entities.v1;
-using TemplateNetCore.Domain.Interfaces.Repositories;
+using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 
-namespace TemplateNetCore.Infrastructure.Data
+namespace TemplateNetCore.Infrastructure.Data.Sql.Repositories
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
     {

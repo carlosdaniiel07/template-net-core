@@ -1,6 +1,6 @@
 ﻿using TemplateNetCore.Domain.Entities.v1;
 
-namespace TemplateNetCore.Domain.Interfaces.Repositories
+namespace TemplateNetCore.Domain.Interfaces.Repositories.MongoDb
 {
     public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {

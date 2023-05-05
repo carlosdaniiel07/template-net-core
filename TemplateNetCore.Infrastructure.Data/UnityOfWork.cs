@@ -1,5 +1,5 @@
-﻿using TemplateNetCore.Domain.Interfaces.Repositories;
-using TemplateNetCore.Domain.Interfaces.Repositories.v1;
+﻿using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
+using TemplateNetCore.Domain.Interfaces.Repositories.Sql.v1;
 using TemplateNetCore.Infrastructure.Data.Repositories.v1;
 
 namespace TemplateNetCore.Infrastructure.Data

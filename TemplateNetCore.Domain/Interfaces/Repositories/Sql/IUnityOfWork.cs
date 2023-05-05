@@ -1,6 +1,6 @@
-﻿using TemplateNetCore.Domain.Interfaces.Repositories.v1;
+﻿using TemplateNetCore.Domain.Interfaces.Repositories.Sql.v1;
 
-namespace TemplateNetCore.Domain.Interfaces.Repositories
+namespace TemplateNetCore.Domain.Interfaces.Repositories.Sql
 {
     public interface IUnityOfWork
     {

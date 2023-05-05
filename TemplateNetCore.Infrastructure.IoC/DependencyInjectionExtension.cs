@@ -1,17 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using TemplateNetCore.Application.Services.v1;
 using TemplateNetCore.Application.UseCases.v1.Auth.SignIn;
 using TemplateNetCore.Application.UseCases.v1.Auth.SignUp;
-using TemplateNetCore.Domain.Interfaces.Repositories;
+using TemplateNetCore.Domain.Interfaces.Repositories.MongoDb.v1;
+using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 using TemplateNetCore.Domain.Models.v1;
 using TemplateNetCore.Domain.UseCases.v1.Auth.SignIn;
 using TemplateNetCore.Domain.UseCases.v1.Auth.SignUp;
 using TemplateNetCore.Infrastructure.Data;
+using TemplateNetCore.Infrastructure.Data.MongoDb.Repositories.v1;
+using TemplateNetCore.Infrastructure.Data.Sql.Repositories;
 using TemplateNetCore.Infrastructure.Service.Services.v1;
 
 namespace TemplateNetCore.Infrastructure.IoC
@@ -21,7 +24,8 @@ namespace TemplateNetCore.Infrastructure.IoC
         public static void ConfigureBaseServices(this IServiceCollection services, IConfiguration configuration)
         {
             AddApplicationInsights(services, configuration);
-            AddDataServices(services, configuration);
+            AddSqlDataServices(services, configuration);
+            AddMongoDbDataServices(services);
             AddInfrastructureServices(services);
             AddApplicationServices(services);
             AddApplicationUseCases(services);
@@ -45,11 +49,16 @@ namespace TemplateNetCore.Infrastructure.IoC
             });
         }
 
-        private static void AddDataServices(IServiceCollection services, IConfiguration configuration)
+        private static void AddSqlDataServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(configuration.GetConnectionString("Sqlite")));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IUnityOfWork, UnityOfWork>();
+        }
+
+        private static void AddMongoDbDataServices(IServiceCollection services)
+        {
+            services.AddSingleton<IProductRepository, ProductRepository>();
         }
 
         private static void AddInfrastructureServices(IServiceCollection services)
