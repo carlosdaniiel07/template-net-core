@@ -17,6 +17,7 @@ namespace TemplateNetCore.Api.Controllers.v1.Auth
 
         [HttpPost]
         [ProducesResponseType(typeof(SignInResponse), 200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Login([FromBody] SignInRequest signInRequest) =>
             Ok(await _signInUseCase.ExecuteAsync(signInRequest));
     }
