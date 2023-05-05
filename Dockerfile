@@ -12,7 +12,8 @@ WORKDIR /src
 COPY ["TemplateNetCore.Api/TemplateNetCore.Api.csproj", "TemplateNetCore.Api/"]
 COPY ["TemplateNetCore.Application/TemplateNetCore.Application.csproj", "TemplateNetCore.Application/"]
 COPY ["TemplateNetCore.Domain/TemplateNetCore.Domain.csproj", "TemplateNetCore.Domain/"]
-COPY ["TemplateNetCore.Infrastructure.Data/TemplateNetCore.Infrastructure.Data.csproj", "TemplateNetCore.Infrastructure.Data/"]
+COPY ["TemplateNetCore.Infrastructure.Data.Sql/TemplateNetCore.Infrastructure.Data.Sql.csproj", "TemplateNetCore.Infrastructure.Data.Sql/"]
+COPY ["TemplateNetCore.Infrastructure.Data.MongoDb/TemplateNetCore.Infrastructure.Data.MongoDb.csproj", "TemplateNetCore.Infrastructure.Data.MongoDb/"]
 COPY ["TemplateNetCore.Infrastructure.IoC/TemplateNetCore.Infrastructure.IoC.csproj", "TemplateNetCore.Infrastructure.IoC/"]
 COPY ["TemplateNetCore.Infrastructure.Service/TemplateNetCore.Infrastructure.Service.csproj", "TemplateNetCore.Infrastructure.Service/"]
 
