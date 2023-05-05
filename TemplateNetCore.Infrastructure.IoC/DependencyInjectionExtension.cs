@@ -37,6 +37,7 @@ namespace TemplateNetCore.Infrastructure.IoC
         {
             services.AddTransient<IHashService, BCryptHashService>();
             services.AddTransient<ITokenService, JwtTokenService>();
+            services.AddSingleton<ICacheService, RedisCacheService>();
         }
 
         private static void AddApplicationServices(IServiceCollection services)
