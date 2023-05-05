@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.ApplicationInsights;
+using Microsoft.Extensions.Logging;
 using TemplateNetCore.Application.Services.v1;
 using TemplateNetCore.Application.UseCases.v1.Auth.SignIn;
 using TemplateNetCore.Application.UseCases.v1.Auth.SignUp;
@@ -18,12 +20,29 @@ namespace TemplateNetCore.Infrastructure.IoC
     {
         public static void ConfigureBaseServices(this IServiceCollection services, IConfiguration configuration)
         {
+            AddApplicationInsights(services, configuration);
             AddDataServices(services, configuration);
             AddInfrastructureServices(services);
             AddApplicationServices(services);
             AddApplicationUseCases(services);
             AddAutoMapper(services);
             AddConfigurationModels(services, configuration);
+        }
+
+        private static void AddApplicationInsights(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddApplicationInsightsTelemetry(options =>
+            {
+                options.ConnectionString = configuration.GetConnectionString("ApplicationInsights");
+            });
+            services.AddLogging(options =>
+            {
+                options.AddApplicationInsights();
+                options.AddFilter<ApplicationInsightsLoggerProvider>((category, logLevel) =>
+                {
+                    return category.Contains("TemplateNetCore") && logLevel == LogLevel.Information;
+                });
+            });
         }
 
         private static void AddDataServices(IServiceCollection services, IConfiguration configuration)
