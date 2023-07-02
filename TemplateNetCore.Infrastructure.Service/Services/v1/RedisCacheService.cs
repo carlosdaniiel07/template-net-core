@@ -13,13 +13,12 @@ namespace TemplateNetCore.Infrastructure.Service.Services.v1
         {
             var connection = ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis"));
             _database = connection.GetDatabase();
-
         }
 
         public async Task AddAsync<T>(string key, T value, TimeSpan ttl)
         {
             if (string.IsNullOrWhiteSpace(key))
-                return;
+                throw new ArgumentNullException(nameof(key));
 
             var json = JsonSerializer.Serialize(value, new JsonSerializerOptions
             {
@@ -31,6 +30,9 @@ namespace TemplateNetCore.Infrastructure.Service.Services.v1
 
         public async Task<T> RetrieveAsync<T>(string key)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
             var value = await _database.StringGetAsync(key);
 
             if (!value.HasValue)
@@ -44,6 +46,9 @@ namespace TemplateNetCore.Infrastructure.Service.Services.v1
 
         public async Task DeleteAsync(string key)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
             await _database.KeyDeleteAsync(key);
         }
     }
