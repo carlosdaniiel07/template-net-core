@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: template-net-core-api-dep
+  namespace: template-net-core
+  labels:
+    app: template-net-core-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: template-net-core-api
+  template:
+    metadata:
+      labels:
+        app: template-net-core-api
+    spec:
+      containers:
+        - name: template-net-core-api-pod
+          image: template-net-core-api:latest
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Docker"
+            - name: ASPNETCORE_URLS
+              value: "http://+:80"
+            - name: ConnectionStrings__Sqlite
+              value: "Data Source=TemplateNetCore.db"
+            - name: ConnectionStrings__MongoDb
+              value: ""
+            - name: ConnectionStrings__Redis
+              value: ""
+            - name: ConnectionStrings__ApplicationInsights
+              value: ""
+            - name: JwtSettings__Secret
+              value: "BDYT0tJ8eT^V#l187TR2vv!L^x33^I%zdf09$Oya$58NhxLQWY"
+            - name: JwtSettings__ExpirationInMinutes
+              value: "60"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 150m
+              memory: 300Mi
+            limits:
+              cpu: 300m
+              memory: 500Mi
+          imagePullPolicy: Never
+      restartPolicy: Always

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: template-net-core-api-svc
+  namespace: template-net-core
+spec:
+  type: LoadBalancer
+  selector:
+    app: template-net-core-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

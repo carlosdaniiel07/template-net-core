@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-dep
+  namespace: template-net-core
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis-pod
+          image: redis:5-alpine
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+            limits:
+              cpu: 20m
+              memory: 30Mi
+          imagePullPolicy: Always
+      restartPolicy: Always
