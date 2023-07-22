@@ -28,6 +28,8 @@ namespace TemplateNetCore.Application.UseCases.v1.Auth.SignIn
         {
             try
             {
+                _logger.LogInformation("Authenticating user {email}", request.Email);
+
                 var user = await _unityOfWork.UserRepository.GetByEmailAsync(request.Email);
 
                 if (user == null)

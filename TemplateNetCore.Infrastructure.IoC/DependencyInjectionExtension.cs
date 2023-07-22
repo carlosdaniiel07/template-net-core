@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
+using Serilog;
+using Serilog.Exceptions;
 using TemplateNetCore.Application.Services.v1;
 using TemplateNetCore.Application.UseCases.v1.Auth.SignIn;
 using TemplateNetCore.Application.UseCases.v1.Auth.SignUp;
@@ -21,9 +24,9 @@ namespace TemplateNetCore.Infrastructure.IoC
 {
     public static class DependencyInjectionExtension
     {
-        public static void ConfigureBaseServices(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureBaseServices(this IServiceCollection services, ConfigureHostBuilder host, IConfiguration configuration)
         {
-            AddApplicationInsights(services, configuration);
+            AddSerilogSeq(host, configuration);
             AddSqlDataServices(services, configuration);
             AddMongoDbDataServices(services);
             AddInfrastructureServices(services);
@@ -33,8 +36,33 @@ namespace TemplateNetCore.Infrastructure.IoC
             AddConfigurationModels(services, configuration);
         }
 
+        public static void AddSerilogSeq(ConfigureHostBuilder host, IConfiguration configuration)
+        {
+            host.UseSerilog((context, config) =>
+            {
+                config
+                    .ReadFrom.Configuration(context.Configuration)
+                    .WriteTo.Console()
+                    .Enrich.WithProperty("ApplicationName", context.HostingEnvironment.ApplicationName)
+                    .Enrich.FromLogContext()
+                    .Enrich.WithExceptionDetails()
+                    .Enrich.WithEnvironmentName()
+                    .Enrich.WithMachineName();
+
+                var seqServerUrl = configuration.GetConnectionString("SeqServerUrl");
+
+                if (!string.IsNullOrWhiteSpace(seqServerUrl))
+                    config.WriteTo.Seq(seqServerUrl);
+            });
+        }
+
         private static void AddApplicationInsights(IServiceCollection services, IConfiguration configuration)
         {
+            var appplicationInsightsConnectionSring = configuration.GetConnectionString("ApplicationInsights");
+
+            if (string.IsNullOrWhiteSpace(appplicationInsightsConnectionSring))
+                return;
+
             services.AddApplicationInsightsTelemetry(options =>
             {
                 options.ConnectionString = configuration.GetConnectionString("ApplicationInsights");

@@ -12,7 +12,7 @@ namespace TemplateNetCore.Api.Infraestructure
     {
         public static void Configure(this WebApplicationBuilder builder)
         {
-            builder.Services.ConfigureBaseServices(builder.Configuration);
+            builder.Services.ConfigureBaseServices(builder.Host, builder.Configuration);
 
             AddControllers(builder.Services);
             AddSwagger(builder.Services);

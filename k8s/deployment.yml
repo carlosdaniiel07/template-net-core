@@ -31,6 +31,8 @@ spec:
               value: ""
             - name: ConnectionStrings__ApplicationInsights
               value: ""
+            - name: "ConnectionStrings__SeqServerUrl"
+              value: ""
             - name: JwtSettings__Secret
               value: "BDYT0tJ8eT^V#l187TR2vv!L^x33^I%zdf09$Oya$58NhxLQWY"
             - name: JwtSettings__ExpirationInMinutes
