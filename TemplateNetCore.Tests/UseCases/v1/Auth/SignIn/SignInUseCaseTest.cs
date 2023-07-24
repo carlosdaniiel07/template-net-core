@@ -22,6 +22,7 @@ namespace TemplateNetCore.Tests.UseCases.v1.Auth.SignIn
         {
             SetupDefaultMocks();
         }
+
         protected override void SetupDefaultMocks()
         {
             _userRepositoryMock.Reset();

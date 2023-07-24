@@ -34,7 +34,7 @@ namespace TemplateNetCore.Application.UseCases.v1.Auth.SignIn
 
                 if (user == null)
                 {
-                    AddNotification("INVALID_CREDENTIALS");
+                    AddNotification(SignInErrors.InvalidCredentials);
                     return default;
                 }
 
@@ -42,13 +42,13 @@ namespace TemplateNetCore.Application.UseCases.v1.Auth.SignIn
 
                 if (!isValidPassword)
                 {
-                    AddNotification("INVALID_CREDENTIALS");
+                    AddNotification(SignInErrors.InvalidCredentials);
                     return default;
                 }
 
                 if (!user.Active)
                 {
-                    AddNotification("USER_NOT_ACTIVE");
+                    AddNotification(SignInErrors.UserNotActive);
                     return default;
                 }
 

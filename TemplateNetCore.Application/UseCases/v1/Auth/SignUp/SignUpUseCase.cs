@@ -34,7 +34,7 @@ namespace TemplateNetCore.Application.UseCases.v1.Auth.SignUp
 
                 if (alreadyExists)
                 {
-                    AddNotification("USER_ALREADY_EXISTS");
+                    AddNotification(SignUpErrors.UserAlreadyExists);
                     return default;
                 }
 
