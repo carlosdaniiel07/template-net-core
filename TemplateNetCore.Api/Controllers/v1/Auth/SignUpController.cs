@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TemplateNetCore.Domain.UseCases.v1.Auth.SignUp;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using TemplateNetCore.Domain.Commands.v1.Auth.SignUp;
 
 namespace TemplateNetCore.Api.Controllers.v1.Auth
 {
@@ -8,16 +9,14 @@ namespace TemplateNetCore.Api.Controllers.v1.Auth
     [ApiExplorerSettings(GroupName = "Auth")]
     public class SignUpController : ControllerBase
     {
-        private readonly ISignUpUseCase _signUpUseCase;
+        private readonly IMediator _mediator;
 
-        public SignUpController(ISignUpUseCase signUpUseCase)
-        {
-            _signUpUseCase = signUpUseCase;
-        }
+        public SignUpController(IMediator mediator) =>
+            _mediator = mediator;
 
         [HttpPost]
-        [ProducesResponseType(typeof(SignUpResponse), 200)]
-        public async Task<IActionResult> Login([FromBody] SignUpRequest signInRequest) =>
-            Ok(await _signUpUseCase.ExecuteAsync(signInRequest));
+        [ProducesResponseType(typeof(SignUpCommandResponse), 200)]
+        public async Task<IActionResult> Login([FromBody] SignUpCommand command) =>
+            Ok(await _mediator.Send(command));
     }
 }

@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TemplateNetCore.Domain.UseCases.v1.Auth.SignIn;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using TemplateNetCore.Domain.Commands.v1.Auth.SignIn;
 
 namespace TemplateNetCore.Api.Controllers.v1.Auth
 {
@@ -8,17 +9,15 @@ namespace TemplateNetCore.Api.Controllers.v1.Auth
     [ApiExplorerSettings(GroupName = "Auth")]
     public class SignInController : ControllerBase
     {
-        private readonly ISignInUseCase _signInUseCase;
+        private readonly IMediator _mediator;
 
-        public SignInController(ISignInUseCase signInUseCase)
-        {
-            _signInUseCase = signInUseCase;
-        }
+        public SignInController(IMediator mediator) =>
+            _mediator = mediator;
 
         [HttpPost]
-        [ProducesResponseType(typeof(SignInResponse), 200)]
+        [ProducesResponseType(typeof(SignInCommandResponse), 200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Login([FromBody] SignInRequest signInRequest) =>
-            Ok(await _signInUseCase.ExecuteAsync(signInRequest));
+        public async Task<IActionResult> Login([FromBody] SignInCommand command) =>
+            Ok(await _mediator.Send(command));
     }
 }

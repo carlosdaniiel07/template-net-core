@@ -1,6 +1,8 @@
-﻿namespace TemplateNetCore.Domain.UseCases.v1.Auth.SignUp
+﻿using MediatR;
+
+namespace TemplateNetCore.Domain.Commands.v1.Auth.SignUp
 {
-    public class SignUpRequest
+    public class SignUpCommand : IRequest<SignUpCommandResponse>
     {
         public string Name { get; set; }
         public string Email { get; set; }

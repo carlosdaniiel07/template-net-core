@@ -6,15 +6,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Serilog;
 using Serilog.Exceptions;
+using TemplateNetCore.Application.Commands.v1.Auth.SignIn;
+using TemplateNetCore.Application.Commands.v1.Auth.SignUp;
 using TemplateNetCore.Application.Services.v1;
-using TemplateNetCore.Application.UseCases.v1.Auth.SignIn;
-using TemplateNetCore.Application.UseCases.v1.Auth.SignUp;
 using TemplateNetCore.Domain.Interfaces.Repositories.MongoDb.v1;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 using TemplateNetCore.Domain.Models.v1;
-using TemplateNetCore.Domain.UseCases.v1.Auth.SignIn;
-using TemplateNetCore.Domain.UseCases.v1.Auth.SignUp;
 using TemplateNetCore.Infrastructure.Data;
 using TemplateNetCore.Infrastructure.Data.MongoDb.Repositories.v1;
 using TemplateNetCore.Infrastructure.Data.Sql.Repositories;
@@ -31,7 +29,7 @@ namespace TemplateNetCore.Infrastructure.IoC
             AddMongoDbDataServices(services);
             AddInfrastructureServices(services);
             AddApplicationServices(services);
-            AddApplicationUseCases(services);
+            AddMediator(services);
             AddAutoMapper(services);
             AddConfigurationModels(services, configuration);
         }
@@ -101,15 +99,17 @@ namespace TemplateNetCore.Infrastructure.IoC
             services.AddScoped<INotificationContextService, NotificationContextService>();
         }
 
-        private static void AddApplicationUseCases(IServiceCollection services)
+        private static void AddMediator(IServiceCollection services)
         {
-            services.AddScoped<ISignInUseCase, SignInUseCase>();
-            services.AddScoped<ISignUpUseCase, SignUpUseCase>();
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(SignInCommandHandler).Assembly);
+            });
         }
 
         private static void AddAutoMapper(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(SignUpProfile).Assembly);
+            services.AddAutoMapper(typeof(SignUpCommandHandlerProfile).Assembly);
         }
 
         private static void AddConfigurationModels(IServiceCollection services, IConfiguration configuration)

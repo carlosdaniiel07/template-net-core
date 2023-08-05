@@ -1,20 +1,21 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using TemplateNetCore.Domain.Commands.v1.Auth.SignUp;
 using TemplateNetCore.Domain.Entities.v1;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
-using TemplateNetCore.Domain.UseCases.v1.Auth.SignUp;
 
-namespace TemplateNetCore.Application.UseCases.v1.Auth.SignUp
+namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp
 {
-    public class SignUpUseCase : BaseUseCase<SignUpUseCase>, ISignUpUseCase
+    public class SignUpCommandHandler : BaseCommandHandler<SignUpCommandHandler>, IRequestHandler<SignUpCommand, SignUpCommandResponse>
     {
         private readonly IUnityOfWork _unityOfWork;
         private readonly IMapper _mapper;
         private readonly IHashService _hashService;
 
-        public SignUpUseCase(
-            ILogger<SignUpUseCase> logger,
+        public SignUpCommandHandler(
+            ILogger<SignUpCommandHandler> logger,
             INotificationContextService notificationContextService,
             IUnityOfWork unityOfWork,
             IMapper mapper,
@@ -26,7 +27,7 @@ namespace TemplateNetCore.Application.UseCases.v1.Auth.SignUp
             _hashService = hashService;
         }
 
-        public async Task<SignUpResponse> ExecuteAsync(SignUpRequest request)
+        public async Task<SignUpCommandResponse> Handle(SignUpCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -34,18 +35,18 @@ namespace TemplateNetCore.Application.UseCases.v1.Auth.SignUp
 
                 if (alreadyExists)
                 {
-                    AddNotification(SignUpErrors.UserAlreadyExists);
+                    AddNotification(SignUpCommandErrors.UserAlreadyExists);
                     return default;
                 }
 
                 var user = _mapper.Map<User>(request);
-                
+
                 user.Password = _hashService.Hash(request.Password);
 
                 await _unityOfWork.UserRepository.AddAsync(user);
                 await _unityOfWork.CommitAsync();
 
-                return _mapper.Map<SignUpResponse>(user);
+                return _mapper.Map<SignUpCommandResponse>(user);
             }
             catch (Exception ex)
             {

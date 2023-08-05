@@ -2,19 +2,19 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
-using TemplateNetCore.Application.UseCases.v1.Auth.SignUp;
+using TemplateNetCore.Application.Commands.v1.Auth.SignUp;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 
-namespace TemplateNetCore.Tests.UseCases
+namespace TemplateNetCore.Tests.Commands
 {
-    public abstract class BaseUseCaseTest<TUseCase>
+    public abstract class BaseCommandHandlerTest<THandler>
     {
-        protected readonly Mock<ILogger<TUseCase>> _loggerMock;
+        protected readonly Mock<ILogger<THandler>> _loggerMock;
         protected readonly Mock<INotificationContextService> _notificationContextServiceMock;
         protected readonly IMapper _mapper;
         protected readonly Fixture _fixture;
 
-        protected BaseUseCaseTest()
+        protected BaseCommandHandlerTest()
         {
             _loggerMock = new();
             _notificationContextServiceMock = new();
@@ -25,12 +25,12 @@ namespace TemplateNetCore.Tests.UseCases
         private IMapper CreateMapper()
         {
             var mapperConfigurationExpression = new MapperConfigurationExpression();
-            mapperConfigurationExpression.AddMaps(typeof(SignUpProfile).Assembly);
+            mapperConfigurationExpression.AddMaps(typeof(SignUpCommandHandlerProfile).Assembly);
 
             return new MapperConfiguration(mapperConfigurationExpression).CreateMapper();
         }
 
-        protected abstract TUseCase MakeSut();
+        protected abstract THandler MakeSut();
         protected abstract void SetupDefaultMocks();
     }
 }
