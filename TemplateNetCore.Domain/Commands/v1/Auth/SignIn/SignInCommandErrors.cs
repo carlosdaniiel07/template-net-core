@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace TemplateNetCore.Domain.UseCases.v1.Auth.SignIn
+namespace TemplateNetCore.Domain.Commands.v1.Auth.SignIn
 {
-    public enum SignInErrors
+    public enum SignInCommandErrors
     {
         [Description("INVALID_CREDENTIALS")]
         InvalidCredentials = 1,

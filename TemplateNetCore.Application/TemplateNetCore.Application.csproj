@@ -6,9 +6,13 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="FluentValidation" Version="11.6.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\TemplateNetCore.Domain\TemplateNetCore.Domain.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Queries\v1\" />
 	</ItemGroup>
 </Project>

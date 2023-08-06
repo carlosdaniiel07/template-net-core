@@ -1,18 +1,19 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
+using TemplateNetCore.Domain.Commands.v1.Auth.SignIn;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
-using TemplateNetCore.Domain.UseCases.v1.Auth.SignIn;
 
-namespace TemplateNetCore.Application.UseCases.v1.Auth.SignIn
+namespace TemplateNetCore.Application.Commands.v1.Auth.SignIn
 {
-    public class SignInUseCase : BaseUseCase<SignInUseCase>, ISignInUseCase
+    public class SignInCommandHandler : BaseCommandHandler<SignInCommandHandler>, IRequestHandler<SignInCommand, SignInCommandResponse>
     {
         private readonly IUnityOfWork _unityOfWork;
         private readonly IHashService _hashService;
         private readonly ITokenService _tokenService;
 
-        public SignInUseCase(
-            ILogger<SignInUseCase> logger,
+        public SignInCommandHandler(
+            ILogger<SignInCommandHandler> logger,
             INotificationContextService notificationContextService,
             IUnityOfWork unityOfWork,
             IHashService hashService,
@@ -24,7 +25,7 @@ namespace TemplateNetCore.Application.UseCases.v1.Auth.SignIn
             _tokenService = tokenService;
         }
 
-        public async Task<SignInResponse> ExecuteAsync(SignInRequest request)
+        public async Task<SignInCommandResponse> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -34,7 +35,7 @@ namespace TemplateNetCore.Application.UseCases.v1.Auth.SignIn
 
                 if (user == null)
                 {
-                    AddNotification(SignInErrors.InvalidCredentials);
+                    AddNotification(SignInCommandErrors.InvalidCredentials);
                     return default;
                 }
 
@@ -42,20 +43,20 @@ namespace TemplateNetCore.Application.UseCases.v1.Auth.SignIn
 
                 if (!isValidPassword)
                 {
-                    AddNotification(SignInErrors.InvalidCredentials);
+                    AddNotification(SignInCommandErrors.InvalidCredentials);
                     return default;
                 }
 
                 if (!user.Active)
                 {
-                    AddNotification(SignInErrors.UserNotActive);
+                    AddNotification(SignInCommandErrors.UserNotActive);
                     return default;
                 }
 
                 var accessToken = _tokenService.Generate(user);
                 var refreshToken = Guid.NewGuid().ToString();
 
-                return new SignInResponse(accessToken, refreshToken);
+                return new SignInCommandResponse(accessToken, refreshToken);
             }
             catch (Exception ex)
             {

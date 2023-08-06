@@ -3,9 +3,9 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Json;
+using TemplateNetCore.Domain.Commands.v1.Auth.SignIn;
 using TemplateNetCore.Domain.Entities.v1;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
-using TemplateNetCore.Domain.UseCases.v1.Auth.SignIn;
 using TemplateNetCore.Infrastructure.Data;
 using TemplateNetCore.Tests;
 using Xunit;
@@ -26,7 +26,7 @@ namespace TemplateNetCore.Api.Tests.Controllers.v1.Auth
 
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var hashService = scope.ServiceProvider.GetRequiredService<IHashService>();
-            var request = _fixture.Create<SignInRequest>();
+            var request = _fixture.Create<SignInCommand>();
             var user = new User
             {
                 Name = _fixture.Create<string>(),
@@ -38,7 +38,7 @@ namespace TemplateNetCore.Api.Tests.Controllers.v1.Auth
             await dbContext.SaveChangesAsync();
 
             var response = await _httpClient.PostAsJsonAsync("/api/v1/auth/sign-in", request);
-            var result = await GetResultFromHttpResponseAsync<SignInResponse>(response);
+            var result = await GetResultFromHttpResponseAsync<SignInCommandResponse>(response);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             result.Should().NotBeNull();
@@ -49,7 +49,7 @@ namespace TemplateNetCore.Api.Tests.Controllers.v1.Auth
         [Fact(DisplayName = "Should returns 400 Bad Request")]
         public async Task ShouldReturns400BadRequest()
         {
-            var request = _fixture.Create<SignInRequest>();
+            var request = _fixture.Create<SignInCommand>();
             var response = await _httpClient.PostAsJsonAsync("/api/v1/auth/sign-in", request);
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);

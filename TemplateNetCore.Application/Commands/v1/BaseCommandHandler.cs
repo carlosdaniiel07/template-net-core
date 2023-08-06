@@ -3,14 +3,14 @@ using System.ComponentModel;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 using TemplateNetCore.Domain.Models.v1;
 
-namespace TemplateNetCore.Application.UseCases
+namespace TemplateNetCore.Application.Commands.v1
 {
-    public abstract class BaseUseCase<TUseCase>
+    public abstract class BaseCommandHandler<THandler>
     {
-        protected readonly ILogger<TUseCase> _logger;
+        protected readonly ILogger<THandler> _logger;
         protected readonly INotificationContextService _notificationContextService;
 
-        protected BaseUseCase(ILogger<TUseCase> logger, INotificationContextService notificationContextService)
+        protected BaseCommandHandler(ILogger<THandler> logger, INotificationContextService notificationContextService)
         {
             _logger = logger;
             _notificationContextService = notificationContextService;
