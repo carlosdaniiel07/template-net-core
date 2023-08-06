@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Serilog;
 using Serilog.Exceptions;
+using TemplateNetCore.Application.Behaviors;
 using TemplateNetCore.Application.Commands.v1.Auth.SignIn;
 using TemplateNetCore.Application.Commands.v1.Auth.SignUp;
 using TemplateNetCore.Application.Services.v1;
@@ -24,14 +26,63 @@ namespace TemplateNetCore.Infrastructure.IoC
     {
         public static void ConfigureBaseServices(this IServiceCollection services, ConfigureHostBuilder host, IConfiguration configuration)
         {
-            AddSerilogSeq(host, configuration);
-            AddSqlDataServices(services, configuration);
-            AddMongoDbDataServices(services);
-            AddInfrastructureServices(services);
-            AddApplicationServices(services);
             AddMediator(services);
+            AddValidators(services);
             AddAutoMapper(services);
             AddConfigurationModels(services, configuration);
+            AddApplicationServices(services);
+            AddInfrastructureServices(services);
+            AddSqlDataServices(services, configuration);
+            AddMongoDbDataServices(services);
+            AddSerilogSeq(host, configuration);
+        }
+
+        private static void AddMediator(IServiceCollection services)
+        {
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(SignInCommandHandler).Assembly);
+                cfg.AddOpenBehavior(typeof(ValidatorBehavior<,>));
+            });
+        }
+
+        private static void AddValidators(IServiceCollection services)
+        {
+            services.AddValidatorsFromAssemblyContaining<SignInCommandValidator>();
+        }
+
+        private static void AddAutoMapper(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(SignUpCommandHandlerProfile).Assembly);
+        }
+
+        private static void AddConfigurationModels(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<JwtSettings>(options => configuration.GetSection("JwtSettings").Bind(options));
+        }
+
+        private static void AddApplicationServices(IServiceCollection services)
+        {
+            services.AddScoped<INotificationContextService, NotificationContextService>();
+        }
+
+        private static void AddInfrastructureServices(IServiceCollection services)
+        {
+            services.AddTransient<IHashService, BCryptHashService>();
+            services.AddTransient<ITokenService, JwtTokenService>();
+            services.AddSingleton<ICacheService, RedisCacheService>();
+        }
+
+        private static void AddSqlDataServices(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(configuration.GetConnectionString("Sqlite")));
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddScoped<IUnityOfWork, UnityOfWork>();
+        }
+
+        private static void AddMongoDbDataServices(IServiceCollection services)
+        {
+            services.AddSingleton<IProductRepository, ProductRepository>();
         }
 
         public static void AddSerilogSeq(ConfigureHostBuilder host, IConfiguration configuration)
@@ -73,48 +124,6 @@ namespace TemplateNetCore.Infrastructure.IoC
                     return category.Contains("TemplateNetCore") && logLevel == LogLevel.Information;
                 });
             });
-        }
-
-        private static void AddSqlDataServices(IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(configuration.GetConnectionString("Sqlite")));
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddScoped<IUnityOfWork, UnityOfWork>();
-        }
-
-        private static void AddMongoDbDataServices(IServiceCollection services)
-        {
-            services.AddSingleton<IProductRepository, ProductRepository>();
-        }
-
-        private static void AddInfrastructureServices(IServiceCollection services)
-        {
-            services.AddTransient<IHashService, BCryptHashService>();
-            services.AddTransient<ITokenService, JwtTokenService>();
-            services.AddSingleton<ICacheService, RedisCacheService>();
-        }
-
-        private static void AddApplicationServices(IServiceCollection services)
-        {
-            services.AddScoped<INotificationContextService, NotificationContextService>();
-        }
-
-        private static void AddMediator(IServiceCollection services)
-        {
-            services.AddMediatR(cfg =>
-            {
-                cfg.RegisterServicesFromAssembly(typeof(SignInCommandHandler).Assembly);
-            });
-        }
-
-        private static void AddAutoMapper(IServiceCollection services)
-        {
-            services.AddAutoMapper(typeof(SignUpCommandHandlerProfile).Assembly);
-        }
-
-        private static void AddConfigurationModels(IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<JwtSettings>(options => configuration.GetSection("JwtSettings").Bind(options));
         }
     }
 }
