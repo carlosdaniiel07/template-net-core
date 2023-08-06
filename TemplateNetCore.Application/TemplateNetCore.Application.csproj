@@ -12,4 +12,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\TemplateNetCore.Domain\TemplateNetCore.Domain.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Queries\v1\" />
+	</ItemGroup>
 </Project>

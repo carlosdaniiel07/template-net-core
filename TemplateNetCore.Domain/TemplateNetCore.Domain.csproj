@@ -9,6 +9,7 @@
   <ItemGroup>
     <Folder Include="Enums\v1\" />
     <Folder Include="Exceptions\v1\" />
+    <Folder Include="Queries\v1\" />
   </ItemGroup>
 
   <ItemGroup>
