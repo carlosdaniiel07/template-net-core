@@ -39,9 +39,10 @@ namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp
                     return default;
                 }
 
-                var user = _mapper.Map<User>(request);
-
-                user.Password = _hashService.Hash(request.Password);
+                var user = _mapper.Map<SignUpCommand, User>(request, opts => opts.AfterMap((_, dest) =>
+                {
+                    dest.Password = _hashService.Hash(request.Password);
+                }));
 
                 await _unityOfWork.UserRepository.AddAsync(user);
                 await _unityOfWork.CommitAsync();
