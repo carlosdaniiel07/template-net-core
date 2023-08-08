@@ -5,16 +5,16 @@ using Moq;
 using TemplateNetCore.Application.Commands.v1.Auth.SignUp;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 
-namespace TemplateNetCore.Tests.Commands
+namespace TemplateNetCore.Tests.Shared
 {
-    public abstract class BaseCommandHandlerTest<THandler>
+    public abstract class BaseTest<TClass> where TClass : class
     {
-        protected readonly Mock<ILogger<THandler>> _loggerMock;
+        protected readonly Mock<ILogger<TClass>> _loggerMock;
         protected readonly Mock<INotificationContextService> _notificationContextServiceMock;
         protected readonly IMapper _mapper;
         protected readonly Fixture _fixture;
 
-        protected BaseCommandHandlerTest()
+        protected BaseTest()
         {
             _loggerMock = new();
             _notificationContextServiceMock = new();
@@ -30,7 +30,7 @@ namespace TemplateNetCore.Tests.Commands
             return new MapperConfiguration(mapperConfigurationExpression).CreateMapper();
         }
 
-        protected abstract THandler MakeSut();
+        protected abstract TClass MakeSut();
         protected abstract void SetupDefaultMocks();
     }
 }
