@@ -12,6 +12,7 @@ using Xunit;
 
 namespace TemplateNetCore.Tests.Commands.v1.Auth.SignIn
 {
+    [Trait("Sut", "SignInCommandHandler")]
     public class SignInCommandHandlerTest : BaseTest<SignInCommandHandler>
     {
         private readonly Mock<IUserRepository> _userRepositoryMock = new();

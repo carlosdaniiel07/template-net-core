@@ -12,6 +12,7 @@ using Xunit;
 
 namespace TemplateNetCore.Api.Tests.Controllers.v1.Auth
 {
+    [Trait("Sut", "SignInController")]
     public class SignInControllerTest : BaseControllerTest
     {
         public SignInControllerTest(TestWebApplicationFactory factory) : base(factory)
