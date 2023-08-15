@@ -9,6 +9,11 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Template .NET Core");
+    });
     app.UseDeveloperExceptionPage();
 }
 
@@ -17,11 +22,6 @@ app.UseRouting();
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseSwagger();
-app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Template .NET Core");
-});
 app.UseMiddleware<GlobalErrorHandlerMiddleware>();
 app.UseEndpoints(endpoints =>
 {
