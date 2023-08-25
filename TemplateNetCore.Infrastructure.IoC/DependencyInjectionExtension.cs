@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
+using Polly;
 using Serilog;
 using Serilog.Exceptions;
 using TemplateNetCore.Application.Behaviors;
@@ -64,7 +65,14 @@ namespace TemplateNetCore.Infrastructure.IoC
 
         private static void AddHttpClient(IServiceCollection services)
         {
-            services.AddHttpClient<IHttpService, HttpService>();
+            services
+                .AddHttpClient<IHttpService, HttpService>()
+                .AddPolicyHandler(_ => Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10)))
+                .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1)))
+                .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
+                    handledEventsAllowedBeforeBreaking: 3,
+                    durationOfBreak: TimeSpan.FromSeconds(30)
+                ));
         }
 
         private static void AddApplicationServices(IServiceCollection services)
