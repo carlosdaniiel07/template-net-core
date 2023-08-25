@@ -5,14 +5,10 @@ using TemplateNetCore.Domain.Commands.v1.Auth.SignUp;
 namespace TemplateNetCore.Api.Controllers.v1.Auth
 {
     [Route("api/v1/auth/sign-up")]
-    [ApiController]
     [ApiExplorerSettings(GroupName = "Auth")]
-    public class SignUpController : ControllerBase
+    public class SignUpController : BaseController
     {
-        private readonly IMediator _mediator;
-
-        public SignUpController(IMediator mediator) =>
-            _mediator = mediator;
+        public SignUpController(IMediator mediator) : base(mediator) { }
 
         [HttpPost]
         [ProducesResponseType(typeof(SignUpCommandResponse), 200)]

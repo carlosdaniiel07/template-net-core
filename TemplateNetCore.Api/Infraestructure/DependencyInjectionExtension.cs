@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.RateLimiting;
 using TemplateNetCore.Api.Filters;
 using TemplateNetCore.Domain.Models.v1;
 using TemplateNetCore.Infrastructure.IoC;
@@ -14,9 +15,29 @@ namespace TemplateNetCore.Api.Infraestructure
         {
             builder.Services.ConfigureBaseServices(builder.Host, builder.Configuration);
 
+            AddRateLimit(builder.Services);
             AddControllers(builder.Services);
             AddSwagger(builder.Services);
             AddAuthenticationJwt(builder.Services, builder.Configuration);
+        }
+
+        private static void AddRateLimit(IServiceCollection services)
+        {
+            services.AddRateLimiter(options =>
+            {
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                options.AddPolicy("fixed", httpContext =>
+                {
+                    return RateLimitPartition.GetFixedWindowLimiter(
+                        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString(),
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 10,
+                            Window = TimeSpan.FromSeconds(10),
+                        }
+                    );
+                });
+            });
         }
 
         private static void AddControllers(IServiceCollection services)
