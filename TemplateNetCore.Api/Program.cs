@@ -24,10 +24,7 @@ app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<GlobalErrorHandlerMiddleware>();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.MapControllers();
 
 app.Run();
 
