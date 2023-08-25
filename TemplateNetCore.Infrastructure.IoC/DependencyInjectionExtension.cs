@@ -30,6 +30,7 @@ namespace TemplateNetCore.Infrastructure.IoC
             AddValidators(services);
             AddAutoMapper(services);
             AddConfigurationModels(services, configuration);
+            AddHttpClient(services);
             AddApplicationServices(services);
             AddInfrastructureServices(services);
             AddSqlDataServices(services, configuration);
@@ -61,6 +62,11 @@ namespace TemplateNetCore.Infrastructure.IoC
             services.Configure<JwtSettings>(options => configuration.GetSection("JwtSettings").Bind(options));
         }
 
+        private static void AddHttpClient(IServiceCollection services)
+        {
+            services.AddHttpClient<IHttpService, HttpService>();
+        }
+
         private static void AddApplicationServices(IServiceCollection services)
         {
             services.AddScoped<INotificationContextService, NotificationContextService>();
@@ -71,6 +77,7 @@ namespace TemplateNetCore.Infrastructure.IoC
             services.AddTransient<IHashService, BCryptHashService>();
             services.AddTransient<ITokenService, JwtTokenService>();
             services.AddSingleton<ICacheService, RedisCacheService>();
+            services.AddTransient<IHttpService, HttpService>();
         }
 
         private static void AddSqlDataServices(IServiceCollection services, IConfiguration configuration)
