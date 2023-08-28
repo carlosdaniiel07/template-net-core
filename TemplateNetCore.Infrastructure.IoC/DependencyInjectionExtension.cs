@@ -85,7 +85,6 @@ namespace TemplateNetCore.Infrastructure.IoC
             services.AddTransient<IHashService, BCryptHashService>();
             services.AddTransient<ITokenService, JwtTokenService>();
             services.AddSingleton<ICacheService, RedisCacheService>();
-            services.AddTransient<IHttpService, HttpService>();
         }
 
         private static void AddSqlDataServices(IServiceCollection services, IConfiguration configuration)
