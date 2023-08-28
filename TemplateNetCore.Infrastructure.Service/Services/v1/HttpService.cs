@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
@@ -32,7 +33,7 @@ namespace TemplateNetCore.Infrastructure.Service.Services.v1
 
         public async Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest request, Dictionary<string, string> headers = null)
         {
-            var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, new MediaTypeHeaderValue("application/json"));
+            var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, new MediaTypeHeaderValue(MediaTypeNames.Application.Json));
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
             {
                 Content = content,
