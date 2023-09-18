@@ -6,7 +6,6 @@ using System.Net.Http.Json;
 using TemplateNetCore.Domain.Commands.v1.Auth.SignIn;
 using TemplateNetCore.Domain.Entities.v1;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
-using TemplateNetCore.Infrastructure.Data;
 using TemplateNetCore.Tests;
 using Xunit;
 
@@ -23,10 +22,7 @@ namespace TemplateNetCore.Api.Tests.Controllers.v1.Auth
         [Fact(DisplayName = "Should returns 200 OK on success")]
         public async Task ShouldReturns200OkOnSuccess()
         {
-            var scope = _factory.Services.CreateScope();
-
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var hashService = scope.ServiceProvider.GetRequiredService<IHashService>();
+            var hashService = _serviceScope.ServiceProvider.GetRequiredService<IHashService>();
             var request = _fixture.Create<SignInCommand>();
             var user = new User
             {
@@ -35,8 +31,8 @@ namespace TemplateNetCore.Api.Tests.Controllers.v1.Auth
                 Password = hashService.Hash(request.Password),
             };
 
-            await dbContext.Users.AddAsync(user);
-            await dbContext.SaveChangesAsync();
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
 
             var response = await _httpClient.PostAsJsonAsync("/api/v1/auth/sign-in", request);
             var result = await GetResultFromHttpResponseAsync<SignInCommandResponse>(response);

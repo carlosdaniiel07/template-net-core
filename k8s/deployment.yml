@@ -23,8 +23,8 @@ spec:
               value: "Docker"
             - name: ASPNETCORE_URLS
               value: "http://+:80"
-            - name: ConnectionStrings__Sqlite
-              value: "Data Source=TemplateNetCore.db"
+            - name: ConnectionStrings__SqlServer
+              value: ""
             - name: ConnectionStrings__MongoDb
               value: ""
             - name: ConnectionStrings__Redis

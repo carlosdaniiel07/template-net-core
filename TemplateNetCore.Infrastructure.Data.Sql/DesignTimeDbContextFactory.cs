@@ -9,7 +9,7 @@ namespace TemplateNetCore.Infrastructure.Data
         {
             var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-            builder.UseSqlite("Data Source=TemplateNetCore.db");
+            builder.UseSqlServer("Server=localhost;Database=TemplateNetCore;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=true");
 
             return new ApplicationDbContext(builder.Options);
         }
