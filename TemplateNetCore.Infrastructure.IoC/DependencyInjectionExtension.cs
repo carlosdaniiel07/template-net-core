@@ -11,7 +11,6 @@ using Serilog.Exceptions;
 using TemplateNetCore.Application.Behaviors;
 using TemplateNetCore.Application.Commands.v1.Auth.SignIn;
 using TemplateNetCore.Application.Commands.v1.Auth.SignUp;
-using TemplateNetCore.Application.Services.v1;
 using TemplateNetCore.Domain.Interfaces.Repositories.MongoDb.v1;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
@@ -32,7 +31,6 @@ namespace TemplateNetCore.Infrastructure.IoC
             AddAutoMapper(services);
             AddConfigurationModels(services, configuration);
             AddHttpClient(services);
-            AddApplicationServices(services);
             AddInfrastructureServices(services);
             AddSqlDataServices(services, configuration);
             AddMongoDbDataServices(services);
@@ -55,7 +53,7 @@ namespace TemplateNetCore.Infrastructure.IoC
 
         private static void AddAutoMapper(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(SignUpCommandHandlerProfile).Assembly);
+            services.AddAutoMapper(typeof(SignUpCommandProfile).Assembly);
         }
 
         private static void AddConfigurationModels(IServiceCollection services, IConfiguration configuration)
@@ -73,11 +71,6 @@ namespace TemplateNetCore.Infrastructure.IoC
                     handledEventsAllowedBeforeBreaking: 3,
                     durationOfBreak: TimeSpan.FromSeconds(30)
                 ));
-        }
-
-        private static void AddApplicationServices(IServiceCollection services)
-        {
-            services.AddScoped<INotificationContextService, NotificationContextService>();
         }
 
         private static void AddInfrastructureServices(IServiceCollection services)

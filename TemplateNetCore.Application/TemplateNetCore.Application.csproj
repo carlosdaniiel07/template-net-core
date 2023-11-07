@@ -14,5 +14,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Queries\v1\" />
+	  <Folder Include="Services\v1\" />
 	</ItemGroup>
 </Project>

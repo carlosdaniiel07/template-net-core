@@ -1,23 +1,21 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using TemplateNetCore.Domain.Interfaces.Services.v1;
+using TemplateNetCore.Domain.Models.v1;
 
 namespace TemplateNetCore.Application.Behaviors
 {
-    public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, Result<TResponse>>
+        where TRequest : IRequest<Result<TResponse>>
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly INotificationContextService _notificationContextService;
 
-        public ValidatorBehavior(IServiceProvider serviceProvider, INotificationContextService notificationContextService)
+        public ValidatorBehavior(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _notificationContextService = notificationContextService;
         }
 
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        public async Task<Result<TResponse>> Handle(TRequest request, RequestHandlerDelegate<Result<TResponse>> next, CancellationToken cancellationToken)
         {
             using var scope = _serviceProvider.CreateAsyncScope();
 
@@ -32,10 +30,9 @@ namespace TemplateNetCore.Application.Behaviors
             if (validationResult.IsValid)
                 return await next();
 
-            foreach (var error in validationResult.Errors)
-                _notificationContextService.AddNotification(error.ErrorMessage);
-            
-            return default;
+            var firstError = validationResult.Errors[0];
+
+            return Result<TResponse>.Failure(new Error(firstError.ErrorCode, firstError.ErrorMessage));
         }
     }
 }

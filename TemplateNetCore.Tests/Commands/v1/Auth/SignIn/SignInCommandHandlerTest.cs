@@ -48,7 +48,6 @@ namespace TemplateNetCore.Tests.Commands.v1.Auth.SignIn
         {
             return new SignInCommandHandler(
                 _loggerMock.Object,
-                _notificationContextServiceMock.Object,
                 _unityOfWorkMock.Object,
                 _hashServiceMock.Object,
                 _tokenServiceMock.Object
@@ -107,11 +106,12 @@ namespace TemplateNetCore.Tests.Commands.v1.Auth.SignIn
 
             var result = await MakeSut().Handle(command, CancellationToken.None);
 
-            result.Should().BeEquivalentTo(new SignInCommandResponse(accessToken, result.RefreshToken));
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().BeEquivalentTo(new SignInCommandResponse(accessToken, result.Data.RefreshToken));
         }
 
-        [Fact(DisplayName = "Should add INVALID_CREDENTIALS if user not exists")]
-        public async Task ShouldAddNotificationIfUserNotExists()
+        [Fact(DisplayName = "Should returns InvalidCredentials error if user not exists")]
+        public async Task ShouldReturnsInvalidCredentialsErrorIfUserNotExists()
         {
             var command = _fixture.Create<SignInCommand>();
 
@@ -119,13 +119,14 @@ namespace TemplateNetCore.Tests.Commands.v1.Auth.SignIn
                 .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync((User)null);
 
-            await MakeSut().Handle(command, CancellationToken.None);
+            var result = await MakeSut().Handle(command, CancellationToken.None);
 
-            _notificationContextServiceMock.Verify(mock => mock.AddNotification("INVALID_CREDENTIALS"), Times.Once);
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().BeEquivalentTo(SignInCommandErrors.InvalidCredentials);
         }
 
-        [Fact(DisplayName = "Should add INVALID_CREDENTIALS if user password is invalid")]
-        public async Task ShouldAddNotificationIfUserPasswordIsInvalid()
+        [Fact(DisplayName = "Should returns InvalidCredentials error if user password is invalid")]
+        public async Task ShouldReturnsInvalidCredentialsErrorIfUserPasswordIsInvalid()
         {
             var command = _fixture.Create<SignInCommand>();
 
@@ -133,13 +134,14 @@ namespace TemplateNetCore.Tests.Commands.v1.Auth.SignIn
                 .Setup(mock => mock.Compare(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(false);
 
-            await MakeSut().Handle(command, CancellationToken.None);
+            var result = await MakeSut().Handle(command, CancellationToken.None);
 
-            _notificationContextServiceMock.Verify(mock => mock.AddNotification("INVALID_CREDENTIALS"), Times.Once);
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().BeEquivalentTo(SignInCommandErrors.InvalidCredentials);
         }
 
-        [Fact(DisplayName = "Should add USER_NOT_ACTIVE if user is not active")]
-        public async Task ShouldAddNotificationIfUserIsNotActive()
+        [Fact(DisplayName = "Should returns UserNotActive error if user is not active")]
+        public async Task ShouldReturnsUserNotActiveErrorIfUserIsNotActive()
         {
             var command = _fixture.Create<SignInCommand>();
             var user = MakeFakeUser(active: false);
@@ -148,9 +150,10 @@ namespace TemplateNetCore.Tests.Commands.v1.Auth.SignIn
                 .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(user);
 
-            await MakeSut().Handle(command, CancellationToken.None);
+            var result = await MakeSut().Handle(command, CancellationToken.None);
 
-            _notificationContextServiceMock.Verify(mock => mock.AddNotification("USER_NOT_ACTIVE"), Times.Once);
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().BeEquivalentTo(SignInCommandErrors.UserNotActive);
         }
 
         [Fact(DisplayName = "Should throw if any dependency throws")]

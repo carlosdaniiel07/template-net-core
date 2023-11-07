@@ -1,10 +1,9 @@
-﻿using System.ComponentModel;
+﻿using TemplateNetCore.Domain.Models.v1;
 
 namespace TemplateNetCore.Domain.Commands.v1.Auth.SignUp
 {
-    public enum SignUpCommandErrors
+    public static class SignUpCommandErrors
     {
-        [Description("USER_ALREADY_EXISTS")]
-        UserAlreadyExists = 1,
+        public static readonly Error UserAlreadyExists = new ($"SignUp.{nameof(UserAlreadyExists)}", "User already exists");
     }
 }

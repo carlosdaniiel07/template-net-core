@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TemplateNetCore.Domain.Commands.v1.Auth.SignIn;
+using TemplateNetCore.Domain.Models.v1;
 
 namespace TemplateNetCore.Api.Controllers.v1.Auth
 {
@@ -12,8 +13,8 @@ namespace TemplateNetCore.Api.Controllers.v1.Auth
 
         [HttpPost]
         [ProducesResponseType(typeof(SignInCommandResponse), 200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(Error), 400)]
         public async Task<IActionResult> Login([FromBody] SignInCommand command) =>
-            Ok(await _mediator.Send(command));
+            GenerateResponse(await _mediator.Send(command));
     }
 }

@@ -3,10 +3,11 @@ using Microsoft.Extensions.Logging;
 using TemplateNetCore.Domain.Commands.v1.Auth.SignIn;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
+using TemplateNetCore.Domain.Models.v1;
 
 namespace TemplateNetCore.Application.Commands.v1.Auth.SignIn
 {
-    public class SignInCommandHandler : BaseCommandHandler<SignInCommandHandler>, IRequestHandler<SignInCommand, SignInCommandResponse>
+    public class SignInCommandHandler : BaseCommandHandler<SignInCommandHandler>, IRequestHandler<SignInCommand, Result<SignInCommandResponse>>
     {
         private readonly IUnityOfWork _unityOfWork;
         private readonly IHashService _hashService;
@@ -14,18 +15,17 @@ namespace TemplateNetCore.Application.Commands.v1.Auth.SignIn
 
         public SignInCommandHandler(
             ILogger<SignInCommandHandler> logger,
-            INotificationContextService notificationContextService,
             IUnityOfWork unityOfWork,
             IHashService hashService,
             ITokenService tokenService
-        ) : base(logger, notificationContextService)
+        ) : base(logger)
         {
             _unityOfWork = unityOfWork;
             _hashService = hashService;
             _tokenService = tokenService;
         }
 
-        public async Task<SignInCommandResponse> Handle(SignInCommand request, CancellationToken cancellationToken)
+        public async Task<Result<SignInCommandResponse>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -34,29 +34,20 @@ namespace TemplateNetCore.Application.Commands.v1.Auth.SignIn
                 var user = await _unityOfWork.UserRepository.GetByEmailAsync(request.Email);
 
                 if (user == null)
-                {
-                    AddNotification(SignInCommandErrors.InvalidCredentials);
-                    return default;
-                }
+                    return Result<SignInCommandResponse>.Failure(SignInCommandErrors.InvalidCredentials);
 
                 var isValidPassword = _hashService.Compare(user.Password, request.Password);
 
                 if (!isValidPassword)
-                {
-                    AddNotification(SignInCommandErrors.InvalidCredentials);
-                    return default;
-                }
+                    return Result<SignInCommandResponse>.Failure(SignInCommandErrors.InvalidCredentials);
 
                 if (!user.Active)
-                {
-                    AddNotification(SignInCommandErrors.UserNotActive);
-                    return default;
-                }
+                    return Result<SignInCommandResponse>.Failure(SignInCommandErrors.UserNotActive);
 
                 var accessToken = _tokenService.Generate(user);
                 var refreshToken = Guid.NewGuid().ToString();
 
-                return new SignInCommandResponse(accessToken, refreshToken);
+                return Result<SignInCommandResponse>.Success(new SignInCommandResponse(accessToken, refreshToken));
             }
             catch (Exception ex)
             {

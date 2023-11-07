@@ -1,13 +1,10 @@
-﻿using System.ComponentModel;
+﻿using TemplateNetCore.Domain.Models.v1;
 
 namespace TemplateNetCore.Domain.Commands.v1.Auth.SignIn
 {
-    public enum SignInCommandErrors
+    public static class SignInCommandErrors
     {
-        [Description("INVALID_CREDENTIALS")]
-        InvalidCredentials = 1,
-
-        [Description("USER_NOT_ACTIVE")]
-        UserNotActive = 2,
+        public static readonly Error InvalidCredentials = new($"SignIn.{nameof(InvalidCredentials)}", "Invalid credentials");
+        public static readonly Error UserNotActive = new($"SignIn.{nameof(UserNotActive)}", "User not active");
     }
 }

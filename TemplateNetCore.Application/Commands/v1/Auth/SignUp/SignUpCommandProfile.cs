@@ -4,9 +4,9 @@ using TemplateNetCore.Domain.Entities.v1;
 
 namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp
 {
-    public class SignUpCommandHandlerProfile : Profile
+    public class SignUpCommandProfile : Profile
     {
-        public SignUpCommandHandlerProfile()
+        public SignUpCommandProfile()
         {
             CreateMap<SignUpCommand, User>();
             CreateMap<User, SignUpCommandResponse>();

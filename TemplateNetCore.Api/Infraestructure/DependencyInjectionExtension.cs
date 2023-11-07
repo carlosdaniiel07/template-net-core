@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.RateLimiting;
-using TemplateNetCore.Api.Filters;
 using TemplateNetCore.Domain.Models.v1;
 using TemplateNetCore.Infrastructure.IoC;
 
@@ -42,10 +41,7 @@ namespace TemplateNetCore.Api.Infraestructure
 
         private static void AddControllers(IServiceCollection services)
         {
-            services.AddControllers(config =>
-            {
-                config.Filters.Add<NotificationFilter>();
-            });
+            services.AddControllers();
         }
 
         private static void AddSwagger(IServiceCollection services)

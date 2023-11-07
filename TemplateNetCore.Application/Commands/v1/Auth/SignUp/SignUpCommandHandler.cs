@@ -5,10 +5,11 @@ using TemplateNetCore.Domain.Commands.v1.Auth.SignUp;
 using TemplateNetCore.Domain.Entities.v1;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
+using TemplateNetCore.Domain.Models.v1;
 
 namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp
 {
-    public class SignUpCommandHandler : BaseCommandHandler<SignUpCommandHandler>, IRequestHandler<SignUpCommand, SignUpCommandResponse>
+    public class SignUpCommandHandler : BaseCommandHandler<SignUpCommandHandler>, IRequestHandler<SignUpCommand, Result<SignUpCommandResponse>>
     {
         private readonly IUnityOfWork _unityOfWork;
         private readonly IMapper _mapper;
@@ -16,28 +17,24 @@ namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp
 
         public SignUpCommandHandler(
             ILogger<SignUpCommandHandler> logger,
-            INotificationContextService notificationContextService,
             IUnityOfWork unityOfWork,
             IMapper mapper,
             IHashService hashService
-        ) : base(logger, notificationContextService)
+        ) : base(logger)
         {
             _unityOfWork = unityOfWork;
             _mapper = mapper;
             _hashService = hashService;
         }
 
-        public async Task<SignUpCommandResponse> Handle(SignUpCommand request, CancellationToken cancellationToken)
+        public async Task<Result<SignUpCommandResponse>> Handle(SignUpCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 var alreadyExists = (await _unityOfWork.UserRepository.GetByEmailAsync(request.Email)) != null;
 
                 if (alreadyExists)
-                {
-                    AddNotification(SignUpCommandErrors.UserAlreadyExists);
-                    return default;
-                }
+                    return Result<SignUpCommandResponse>.Failure(SignUpCommandErrors.UserAlreadyExists);
 
                 var user = _mapper.Map<SignUpCommand, User>(request, opts => opts.AfterMap((_, dest) =>
                 {
@@ -47,7 +44,7 @@ namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp
                 await _unityOfWork.UserRepository.AddAsync(user);
                 await _unityOfWork.CommitAsync();
 
-                return _mapper.Map<SignUpCommandResponse>(user);
+                return Result<SignUpCommandResponse>.Success(_mapper.Map<SignUpCommandResponse>(user));
             }
             catch (Exception ex)
             {
