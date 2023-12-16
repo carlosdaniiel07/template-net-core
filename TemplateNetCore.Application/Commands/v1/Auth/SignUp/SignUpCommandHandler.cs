@@ -48,7 +48,7 @@ namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while creating user @email", request.Email);
+                _logger.LogError(ex, "Error while creating user {email}", request.Email);
                 throw;
             }
         }

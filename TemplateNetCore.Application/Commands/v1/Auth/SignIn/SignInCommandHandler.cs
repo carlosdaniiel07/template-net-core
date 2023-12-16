@@ -51,7 +51,7 @@ namespace TemplateNetCore.Application.Commands.v1.Auth.SignIn
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while authenticating user @email", request.Email);
+                _logger.LogError(ex, "Error while authenticating user {email}", request.Email);
                 throw;
             }
         }
