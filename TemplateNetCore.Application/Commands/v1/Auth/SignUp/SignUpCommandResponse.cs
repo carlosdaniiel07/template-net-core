@@ -1,4 +1,4 @@
-﻿namespace TemplateNetCore.Domain.Commands.v1.Auth.SignUp
+﻿namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp
 {
     public class SignUpCommandResponse
     {

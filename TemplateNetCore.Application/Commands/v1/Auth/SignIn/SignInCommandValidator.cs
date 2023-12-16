@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using TemplateNetCore.Domain.Commands.v1.Auth.SignIn;
 
 namespace TemplateNetCore.Application.Commands.v1.Auth.SignIn
 {

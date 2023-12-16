@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TemplateNetCore.Domain.Models.v1;
 
-namespace TemplateNetCore.Domain.Commands.v1.Auth.SignIn
+namespace TemplateNetCore.Application.Commands.v1.Auth.SignIn
 {
     public class SignInCommand : IRequest<Result<SignInCommandResponse>>
     {

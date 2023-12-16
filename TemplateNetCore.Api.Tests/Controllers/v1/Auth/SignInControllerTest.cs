@@ -3,7 +3,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Json;
-using TemplateNetCore.Domain.Commands.v1.Auth.SignIn;
+using TemplateNetCore.Application.Commands.v1.Auth.SignIn;
 using TemplateNetCore.Domain.Entities.v1;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 using TemplateNetCore.Tests;

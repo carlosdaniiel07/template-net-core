@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TemplateNetCore.Domain.Commands.v1.Auth.SignUp;
+using TemplateNetCore.Application.Commands.v1.Auth.SignUp;
 using TemplateNetCore.Domain.Models.v1;
 
 namespace TemplateNetCore.Api.Controllers.v1.Auth

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TemplateNetCore.Domain.Models.v1;
 
-namespace TemplateNetCore.Domain.Commands.v1.Auth.SignUp
+namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp
 {
     public class SignUpCommand : IRequest<Result<SignUpCommandResponse>>
     {

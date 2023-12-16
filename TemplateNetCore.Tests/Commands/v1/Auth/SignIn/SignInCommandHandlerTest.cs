@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Moq;
 using TemplateNetCore.Application.Commands.v1.Auth.SignIn;
-using TemplateNetCore.Domain.Commands.v1.Auth.SignIn;
 using TemplateNetCore.Domain.Entities.v1;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql.v1;
