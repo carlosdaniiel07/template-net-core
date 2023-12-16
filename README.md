@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/carlosdaniiel07/template-net-core/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/carlosdaniiel07/template-net-core/actions/workflows/main.yml)
 
-Template base para criação de projetos back-end com ASP.NET Core 6.x
+Template base para criação de projetos back-end com ASP.NET Core 8.x
 
 ## 📌 Menu
 
@@ -16,7 +16,7 @@ Template base para criação de projetos back-end com ASP.NET Core 6.x
 ## 🚀 Tecnologias
 
 - C#
-- .NET Core 6
+- .NET Core 8
 - Entity Framework Core
 - AutoMapper
 - BCrypt
