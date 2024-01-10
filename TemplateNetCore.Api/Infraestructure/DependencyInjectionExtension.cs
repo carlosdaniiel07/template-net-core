@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.RateLimiting;
+using TemplateNetCore.Api.Middlewares;
 using TemplateNetCore.Domain.Models.v1;
 using TemplateNetCore.Infrastructure.IoC;
 
@@ -16,9 +17,9 @@ namespace TemplateNetCore.Api.Infraestructure
             builder.Services.ConfigureBaseServices(builder.Host, builder.Configuration);
 
             AddRateLimit(builder.Services);
-            AddControllers(builder.Services);
             AddSwagger(builder.Services);
             AddAuthenticationJwt(builder.Services, builder.Configuration);
+            AddControllers(builder.Services);
         }
 
         private static void AddRateLimit(IServiceCollection services)
@@ -57,6 +58,8 @@ namespace TemplateNetCore.Api.Infraestructure
                 options.GroupNameFormat = "'v'V";
                 options.SubstituteApiVersionInUrl = true;
             });
+            services.AddExceptionHandler<GlobalErrorHandlerMiddleware>();
+            services.AddProblemDetails();
             services.AddControllers();
         }
 

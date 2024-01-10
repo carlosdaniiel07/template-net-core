@@ -1,40 +1,34 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using System.Net;
 using System.Text.Json;
 using TemplateNetCore.Domain.Exceptions;
 
 namespace TemplateNetCore.Api.Middlewares
 {
-    public class GlobalErrorHandlerMiddleware
+    public class GlobalErrorHandlerMiddleware : IExceptionHandler
     {
-        private readonly RequestDelegate _next;
         private readonly ILogger<GlobalErrorHandlerMiddleware> _logger;
 
-        public GlobalErrorHandlerMiddleware(RequestDelegate next, ILogger<GlobalErrorHandlerMiddleware> logger)
+        public GlobalErrorHandlerMiddleware(ILogger<GlobalErrorHandlerMiddleware> logger)
         {
-            _next = next;
             _logger = logger;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            try
-            {
-                await _next(context);
-            }
-            catch (Exception ex)
-            {
-                var response = context.Response;
-                
-                response.ContentType = "application/json";
-                response.StatusCode = ex is BaseException ? (ex as BaseException).StatusCode : (int)HttpStatusCode.InternalServerError;
+            var response = httpContext.Response;
 
-                var message = response.StatusCode == 500 ? "An unknown error has occurred. Try again later" : ex.Message;
-                var jsonResponse = JsonSerializer.Serialize(new { message });
+            response.ContentType = "application/json";
+            response.StatusCode = exception is BaseException ? (exception as BaseException).StatusCode : (int)HttpStatusCode.InternalServerError;
 
-                _logger.LogError(ex, message);
+            var message = response.StatusCode == 500 ? "An unknown error has occurred. Try again later" : exception.Message;
+            var jsonResponse = JsonSerializer.Serialize(new { message });
 
-                await response.WriteAsync(jsonResponse);
-            }
+            _logger.LogError(exception, message);
+
+            await response.WriteAsync(jsonResponse, cancellationToken);
+
+            return true;
         }
     }
 }

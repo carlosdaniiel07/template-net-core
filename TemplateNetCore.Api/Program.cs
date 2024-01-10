@@ -1,5 +1,4 @@
 using TemplateNetCore.Api.Infraestructure;
-using TemplateNetCore.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +22,7 @@ app.UseRateLimiter();
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<GlobalErrorHandlerMiddleware>();
+app.UseExceptionHandler();
 app.MapControllers();
 
 app.Run();
