@@ -5,6 +5,8 @@
 		<ServerGarbageCollection>false</ServerGarbageCollection>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Asp.Versioning.Http" Version="8.0.0" />
+		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	</ItemGroup>

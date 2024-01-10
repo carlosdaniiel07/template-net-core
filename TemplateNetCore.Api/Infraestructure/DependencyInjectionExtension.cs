@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -41,6 +42,21 @@ namespace TemplateNetCore.Api.Infraestructure
 
         private static void AddControllers(IServiceCollection services)
         {
+            services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1);
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ApiVersionReader = ApiVersionReader.Combine(
+                    new UrlSegmentApiVersionReader(),
+                    new HeaderApiVersionReader("X-Api-Version")
+                );
+            })
+            .AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'V";
+                options.SubstituteApiVersionInUrl = true;
+            });
             services.AddControllers();
         }
 
