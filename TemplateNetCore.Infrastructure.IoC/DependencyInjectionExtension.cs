@@ -15,6 +15,7 @@ using TemplateNetCore.Domain.Interfaces.Repositories.MongoDb.v1;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 using TemplateNetCore.Domain.Models.v1;
+using TemplateNetCore.Domain.Services.v1;
 using TemplateNetCore.Infrastructure.Data;
 using TemplateNetCore.Infrastructure.Data.MongoDb.Repositories.v1;
 using TemplateNetCore.Infrastructure.Data.Sql.Repositories;
@@ -31,6 +32,7 @@ namespace TemplateNetCore.Infrastructure.IoC
             AddAutoMapper(services);
             AddConfigurationModels(services, configuration);
             AddHttpClient(services);
+            AddServices(services);
             AddInfrastructureServices(services);
             AddSqlDataServices(services, configuration);
             AddMongoDbDataServices(services);
@@ -71,6 +73,11 @@ namespace TemplateNetCore.Infrastructure.IoC
                     handledEventsAllowedBeforeBreaking: 3,
                     durationOfBreak: TimeSpan.FromSeconds(30)
                 ));
+        }
+
+        private static void AddServices(IServiceCollection services)
+        {
+            services.AddScoped<INotificationContext, NotificationContext>();
         }
 
         private static void AddInfrastructureServices(IServiceCollection services)
