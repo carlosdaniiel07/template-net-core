@@ -19,12 +19,15 @@ namespace TemplateNetCore.Infrastructure.Data.MongoDb.Mappings
                     .SetSerializer(new GuidSerializer(BsonType.String))
                     .SetIdGenerator(new GuidGenerator())
                     .SetElementName("id");
+
                 classMap.MapMember(survey => survey.CreatedAt)
                     .SetSerializer(dateTimeSerializer)
                     .SetElementName("createdAt");
+
                 classMap.MapMember(survey => survey.UpdatedAt)
                     .SetSerializer(nullableDateTimeSerializer)
                     .SetElementName("updatedAt");
+
                 classMap.MapMember(survey => survey.DeletedAt)
                     .SetSerializer(nullableDateTimeSerializer)
                     .SetElementName("deletedAt");

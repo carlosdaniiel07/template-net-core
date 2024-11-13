@@ -14,9 +14,11 @@ namespace TemplateNetCore.Infrastructure.Data.MongoDb.Mappings
                 classMap
                     .MapMember(survey => survey.Description)
                     .SetElementName("description");
+
                 classMap
                     .MapMember(survey => survey.Category)
                     .SetElementName("category");
+
                 classMap
                     .MapMember(survey => survey.Value)
                     .SetSerializer(new DecimalSerializer(BsonType.Decimal128))

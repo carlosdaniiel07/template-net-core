@@ -5,10 +5,10 @@
 		<ServerGarbageCollection>false</ServerGarbageCollection>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Asp.Versioning.Http" Version="8.0.0" />
-		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
+		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\TemplateNetCore.Infrastructure.IoC\TemplateNetCore.Infrastructure.IoC.csproj" />
