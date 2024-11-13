@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Polly;
+using Polly.CircuitBreaker;
+using Polly.Retry;
 using Serilog;
 using Serilog.Exceptions;
 using TemplateNetCore.Application.Behaviors;
@@ -67,12 +69,23 @@ namespace TemplateNetCore.Infrastructure.IoC
         {
             services
                 .AddHttpClient<IHttpService, HttpService>()
-                .AddPolicyHandler(_ => Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10)))
-                .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1)))
-                .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
-                    handledEventsAllowedBeforeBreaking: 3,
-                    durationOfBreak: TimeSpan.FromSeconds(30)
-                ));
+                .AddResilienceHandler("default", builder =>
+                {
+                    builder.AddTimeout(TimeSpan.FromSeconds(10));
+                    builder.AddRetry(new RetryStrategyOptions<HttpResponseMessage>
+                    {
+                        MaxRetryAttempts = 3,
+                        Delay = TimeSpan.FromSeconds(1),
+                        BackoffType = DelayBackoffType.Constant,
+                    });
+                    builder.AddCircuitBreaker(new CircuitBreakerStrategyOptions<HttpResponseMessage>
+                    {
+                        SamplingDuration = TimeSpan.FromSeconds(10),
+                        FailureRatio = 0.9,
+                        MinimumThroughput = 5,
+                        BreakDuration = TimeSpan.FromSeconds(30),
+                    });
+                });
         }
 
         private static void AddServices(IServiceCollection services)
