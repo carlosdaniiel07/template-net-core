@@ -1,12 +1,11 @@
-﻿using MediatR;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 using TemplateNetCore.Domain.Models.v1;
 
 namespace TemplateNetCore.Application.Commands.v1.Auth.SignIn
 {
-    public class SignInCommandHandler : BaseCommandHandler<SignInCommandHandler>, IRequestHandler<SignInCommand, Result<SignInCommandResponse>>
+    public class SignInCommandHandler : BaseCommandHandler<SignInCommandHandler, SignInCommand, SignInCommandResponse>
     {
         private readonly IUnityOfWork _unityOfWork;
         private readonly IHashService _hashService;
@@ -24,7 +23,7 @@ namespace TemplateNetCore.Application.Commands.v1.Auth.SignIn
             _tokenService = tokenService;
         }
 
-        public async Task<Result<SignInCommandResponse>> Handle(SignInCommand request, CancellationToken cancellationToken)
+        public override async Task<Result<SignInCommandResponse>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -33,20 +32,20 @@ namespace TemplateNetCore.Application.Commands.v1.Auth.SignIn
                 var user = await _unityOfWork.UserRepository.GetByEmailAsync(request.Email);
 
                 if (user == null)
-                    return Result<SignInCommandResponse>.Failure(SignInCommandErrors.InvalidCredentials);
+                    return Failure(SignInCommandErrors.InvalidCredentials);
 
                 var isValidPassword = _hashService.Compare(user.Password, request.Password);
 
                 if (!isValidPassword)
-                    return Result<SignInCommandResponse>.Failure(SignInCommandErrors.InvalidCredentials);
+                    return Failure(SignInCommandErrors.InvalidCredentials);
 
                 if (!user.Active)
-                    return Result<SignInCommandResponse>.Failure(SignInCommandErrors.UserNotActive);
+                    return Failure(SignInCommandErrors.UserNotActive);
 
                 var accessToken = _tokenService.Generate(user);
                 var refreshToken = Guid.NewGuid().ToString();
 
-                return Result<SignInCommandResponse>.Success(new SignInCommandResponse(accessToken, refreshToken));
+                return Success(new SignInCommandResponse(accessToken, refreshToken));
             }
             catch (Exception ex)
             {

@@ -6,7 +6,6 @@ using TemplateNetCore.Domain.Models.v1;
 
 namespace TemplateNetCore.Api.Controllers.v1
 {
-
     [ApiController]
     [EnableRateLimiting("fixed")]
     public abstract class BaseController : ControllerBase
