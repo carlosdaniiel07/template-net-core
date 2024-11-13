@@ -1,8 +1,7 @@
-﻿namespace TemplateNetCore.Domain.Interfaces.Services.v1
+﻿namespace TemplateNetCore.Domain.Interfaces.Services.v1;
+
+public interface IHashService
 {
-    public interface IHashService
-    {
-        string Hash(string value);
-        bool Compare(string hash, string value);
-    }
+    string Hash(string value);
+    bool Compare(string hash, string value);
 }

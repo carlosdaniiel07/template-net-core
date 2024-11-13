@@ -7,36 +7,35 @@ using TemplateNetCore.Domain.Entities.v1;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 using TemplateNetCore.Domain.Models.v1;
 
-namespace TemplateNetCore.Infrastructure.Service.Services.v1
+namespace TemplateNetCore.Infrastructure.Service.Services.v1;
+
+public class JwtTokenService : ITokenService
 {
-    public class JwtTokenService : ITokenService
+    private readonly JwtSettings _jwtSettings;
+
+    public JwtTokenService(IOptions<JwtSettings> options)
     {
-        private readonly JwtSettings _jwtSettings;
+        _jwtSettings = options.Value;
+    }
 
-        public JwtTokenService(IOptions<JwtSettings> options)
+    public string Generate(User user)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var secretKey = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
-            _jwtSettings = options.Value;
-        }
-
-        public string Generate(User user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var secretKey = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            Subject = new ClaimsIdentity(new Claim[]
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email),
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes),
-                Issuer = _jwtSettings.Issuer,
-                Audience = _jwtSettings.Audience,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var jwtToken = tokenHandler.CreateToken(tokenDescriptor);
+                new Claim(ClaimTypes.Name, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+            }),
+            Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes),
+            Issuer = _jwtSettings.Issuer,
+            Audience = _jwtSettings.Audience,
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature)
+        };
+        var jwtToken = tokenHandler.CreateToken(tokenDescriptor);
 
-            return tokenHandler.WriteToken(jwtToken);
-        }
+        return tokenHandler.WriteToken(jwtToken);
     }
 }

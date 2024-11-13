@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using TemplateNetCore.Domain.Entities.v1;
 
-namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp
+namespace TemplateNetCore.Application.Commands.v1.Auth.SignUp;
+
+public class SignUpCommandProfile : Profile
 {
-    public class SignUpCommandProfile : Profile
+    public SignUpCommandProfile()
     {
-        public SignUpCommandProfile()
-        {
-            CreateMap<SignUpCommand, User>();
-            CreateMap<User, SignUpCommandResponse>();
-        }
+        CreateMap<SignUpCommand, User>();
+        CreateMap<User, SignUpCommandResponse>();
     }
 }

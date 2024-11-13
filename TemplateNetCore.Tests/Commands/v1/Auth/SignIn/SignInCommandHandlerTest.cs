@@ -9,172 +9,171 @@ using TemplateNetCore.Domain.Interfaces.Services.v1;
 using TemplateNetCore.Tests.Shared;
 using Xunit;
 
-namespace TemplateNetCore.Tests.Commands.v1.Auth.SignIn
+namespace TemplateNetCore.Tests.Commands.v1.Auth.SignIn;
+
+[Trait("Sut", "SignInCommandHandler")]
+public class SignInCommandHandlerTest : BaseTest<SignInCommandHandler>
 {
-    [Trait("Sut", "SignInCommandHandler")]
-    public class SignInCommandHandlerTest : BaseTest<SignInCommandHandler>
+    private readonly Mock<IUserRepository> _userRepositoryMock = new();
+    private readonly Mock<IUnityOfWork> _unityOfWorkMock = new();
+    private readonly Mock<IHashService> _hashServiceMock = new();
+    private readonly Mock<ITokenService> _tokenServiceMock = new();
+
+    public SignInCommandHandlerTest() =>
+        SetupDefaultMocks();
+
+    protected override void SetupDefaultMocks()
     {
-        private readonly Mock<IUserRepository> _userRepositoryMock = new();
-        private readonly Mock<IUnityOfWork> _unityOfWorkMock = new();
-        private readonly Mock<IHashService> _hashServiceMock = new();
-        private readonly Mock<ITokenService> _tokenServiceMock = new();
+        _userRepositoryMock.Reset();
+        _unityOfWorkMock.Reset();
+        _hashServiceMock.Reset();
+        _tokenServiceMock.Reset();
 
-        public SignInCommandHandlerTest() =>
-            SetupDefaultMocks();
+        _userRepositoryMock
+            .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync(MakeFakeUser());
+        _unityOfWorkMock
+            .Setup(mock => mock.UserRepository)
+            .Returns(_userRepositoryMock.Object);
+        _hashServiceMock
+            .Setup(mock => mock.Compare(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(true);
+        _tokenServiceMock
+            .Setup(mock => mock.Generate(It.IsAny<User>()))
+            .Returns(_fixture.Create<string>());
+    }
 
-        protected override void SetupDefaultMocks()
-        {
-            _userRepositoryMock.Reset();
-            _unityOfWorkMock.Reset();
-            _hashServiceMock.Reset();
-            _tokenServiceMock.Reset();
+    protected override SignInCommandHandler MakeSut()
+    {
+        return new SignInCommandHandler(
+            _loggerMock.Object,
+            _unityOfWorkMock.Object,
+            _hashServiceMock.Object,
+            _tokenServiceMock.Object
+        );
+    }
 
-            _userRepositoryMock
-                .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
-                .ReturnsAsync(MakeFakeUser());
-            _unityOfWorkMock
-                .Setup(mock => mock.UserRepository)
-                .Returns(_userRepositoryMock.Object);
-            _hashServiceMock
-                .Setup(mock => mock.Compare(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(true);
-            _tokenServiceMock
-                .Setup(mock => mock.Generate(It.IsAny<User>()))
-                .Returns(_fixture.Create<string>());
-        }
+    [Fact(DisplayName = "Should call IUnityOfWork to get user by email")]
+    public async Task ShouldCallIUnityOfWorkToGetUserByEmail()
+    {
+        var command = _fixture.Create<SignInCommand>();
 
-        protected override SignInCommandHandler MakeSut()
-        {
-            return new SignInCommandHandler(
-                _loggerMock.Object,
-                _unityOfWorkMock.Object,
-                _hashServiceMock.Object,
-                _tokenServiceMock.Object
-            );
-        }
+        await MakeSut().Handle(command, CancellationToken.None);
 
-        [Fact(DisplayName = "Should call IUnityOfWork to get user by email")]
-        public async Task ShouldCallIUnityOfWorkToGetUserByEmail()
-        {
-            var command = _fixture.Create<SignInCommand>();
+        _userRepositoryMock.Verify(mock => mock.GetByEmailAsync(command.Email), Times.Once);
+    }
 
-            await MakeSut().Handle(command, CancellationToken.None);
+    [Fact(DisplayName = "Should call IHashService to validate user password")]
+    public async Task ShouldCallIHashServiceToValidateUserPassword()
+    {
+        var command = _fixture.Create<SignInCommand>();
+        var user = MakeFakeUser();
 
-            _userRepositoryMock.Verify(mock => mock.GetByEmailAsync(command.Email), Times.Once);
-        }
+        _userRepositoryMock
+            .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync(user);
 
-        [Fact(DisplayName = "Should call IHashService to validate user password")]
-        public async Task ShouldCallIHashServiceToValidateUserPassword()
-        {
-            var command = _fixture.Create<SignInCommand>();
-            var user = MakeFakeUser();
+        await MakeSut().Handle(command, CancellationToken.None);
 
-            _userRepositoryMock
-                .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
-                .ReturnsAsync(user);
+        _hashServiceMock.Verify(mock => mock.Compare(user.Password, command.Password), Times.Once);
+    }
 
-            await MakeSut().Handle(command, CancellationToken.None);
+    [Fact(DisplayName = "Should call ITokenService to generate access token")]
+    public async Task ShouldCallITokenServiceToGenerateAccessToken()
+    {
+        var command = _fixture.Create<SignInCommand>();
+        var user = MakeFakeUser();
 
-            _hashServiceMock.Verify(mock => mock.Compare(user.Password, command.Password), Times.Once);
-        }
+        _userRepositoryMock
+            .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync(user);
 
-        [Fact(DisplayName = "Should call ITokenService to generate access token")]
-        public async Task ShouldCallITokenServiceToGenerateAccessToken()
-        {
-            var command = _fixture.Create<SignInCommand>();
-            var user = MakeFakeUser();
+        await MakeSut().Handle(command, CancellationToken.None);
 
-            _userRepositoryMock
-                .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
-                .ReturnsAsync(user);
+        _tokenServiceMock.Verify(mock => mock.Generate(user), Times.Once);
+    }
 
-            await MakeSut().Handle(command, CancellationToken.None);
+    [Fact(DisplayName = "Should returns SignInResponse on success")]
+    public async Task ShouldReturnsSignInResponseOnSuccess()
+    {
+        var command = _fixture.Create<SignInCommand>();
+        var accessToken = _fixture.Create<string>();
 
-            _tokenServiceMock.Verify(mock => mock.Generate(user), Times.Once);
-        }
+        _tokenServiceMock
+            .Setup(mock => mock.Generate(It.IsAny<User>()))
+            .Returns(accessToken);
 
-        [Fact(DisplayName = "Should returns SignInResponse on success")]
-        public async Task ShouldReturnsSignInResponseOnSuccess()
-        {
-            var command = _fixture.Create<SignInCommand>();
-            var accessToken = _fixture.Create<string>();
+        var result = await MakeSut().Handle(command, CancellationToken.None);
 
-            _tokenServiceMock
-                .Setup(mock => mock.Generate(It.IsAny<User>()))
-                .Returns(accessToken);
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().BeEquivalentTo(new SignInCommandResponse(accessToken, result.Data.RefreshToken));
+    }
 
-            var result = await MakeSut().Handle(command, CancellationToken.None);
+    [Fact(DisplayName = "Should returns InvalidCredentials error if user not exists")]
+    public async Task ShouldReturnsInvalidCredentialsErrorIfUserNotExists()
+    {
+        var command = _fixture.Create<SignInCommand>();
 
-            result.IsSuccess.Should().BeTrue();
-            result.Data.Should().BeEquivalentTo(new SignInCommandResponse(accessToken, result.Data.RefreshToken));
-        }
+        _userRepositoryMock
+            .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync((User)null);
 
-        [Fact(DisplayName = "Should returns InvalidCredentials error if user not exists")]
-        public async Task ShouldReturnsInvalidCredentialsErrorIfUserNotExists()
-        {
-            var command = _fixture.Create<SignInCommand>();
+        var result = await MakeSut().Handle(command, CancellationToken.None);
 
-            _userRepositoryMock
-                .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
-                .ReturnsAsync((User)null);
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().BeEquivalentTo(SignInCommandErrors.InvalidCredentials);
+    }
 
-            var result = await MakeSut().Handle(command, CancellationToken.None);
+    [Fact(DisplayName = "Should returns InvalidCredentials error if user password is invalid")]
+    public async Task ShouldReturnsInvalidCredentialsErrorIfUserPasswordIsInvalid()
+    {
+        var command = _fixture.Create<SignInCommand>();
 
-            result.IsFailure.Should().BeTrue();
-            result.Error.Should().BeEquivalentTo(SignInCommandErrors.InvalidCredentials);
-        }
+        _hashServiceMock
+            .Setup(mock => mock.Compare(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(false);
 
-        [Fact(DisplayName = "Should returns InvalidCredentials error if user password is invalid")]
-        public async Task ShouldReturnsInvalidCredentialsErrorIfUserPasswordIsInvalid()
-        {
-            var command = _fixture.Create<SignInCommand>();
+        var result = await MakeSut().Handle(command, CancellationToken.None);
 
-            _hashServiceMock
-                .Setup(mock => mock.Compare(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(false);
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().BeEquivalentTo(SignInCommandErrors.InvalidCredentials);
+    }
 
-            var result = await MakeSut().Handle(command, CancellationToken.None);
+    [Fact(DisplayName = "Should returns UserNotActive error if user is not active")]
+    public async Task ShouldReturnsUserNotActiveErrorIfUserIsNotActive()
+    {
+        var command = _fixture.Create<SignInCommand>();
+        var user = MakeFakeUser(active: false);
 
-            result.IsFailure.Should().BeTrue();
-            result.Error.Should().BeEquivalentTo(SignInCommandErrors.InvalidCredentials);
-        }
+        _userRepositoryMock
+            .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync(user);
 
-        [Fact(DisplayName = "Should returns UserNotActive error if user is not active")]
-        public async Task ShouldReturnsUserNotActiveErrorIfUserIsNotActive()
-        {
-            var command = _fixture.Create<SignInCommand>();
-            var user = MakeFakeUser(active: false);
+        var result = await MakeSut().Handle(command, CancellationToken.None);
 
-            _userRepositoryMock
-                .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
-                .ReturnsAsync(user);
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().BeEquivalentTo(SignInCommandErrors.UserNotActive);
+    }
 
-            var result = await MakeSut().Handle(command, CancellationToken.None);
+    [Fact(DisplayName = "Should throw if any dependency throws")]
+    public async Task ShouldThrowIfAnyDependencyThrows()
+    {
+        var command = _fixture.Create<SignInCommand>();
 
-            result.IsFailure.Should().BeTrue();
-            result.Error.Should().BeEquivalentTo(SignInCommandErrors.UserNotActive);
-        }
+        _userRepositoryMock
+            .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
+            .ThrowsAsync(new Exception("An error occurred"));
 
-        [Fact(DisplayName = "Should throw if any dependency throws")]
-        public async Task ShouldThrowIfAnyDependencyThrows()
-        {
-            var command = _fixture.Create<SignInCommand>();
+        Func<Task> act = async () => await MakeSut().Handle(command, CancellationToken.None);
 
-            _userRepositoryMock
-                .Setup(mock => mock.GetByEmailAsync(It.IsAny<string>()))
-                .ThrowsAsync(new Exception("An error occurred"));
+        await act.Should().ThrowExactlyAsync<Exception>()
+            .WithMessage("An error occurred");
+    }
 
-            Func<Task> act = async () => await MakeSut().Handle(command, CancellationToken.None);
-
-            await act.Should().ThrowExactlyAsync<Exception>()
-                .WithMessage("An error occurred");
-        }
-
-        private User MakeFakeUser(bool active = true)
-        {
-            return _fixture.Build<User>()
-                .With(dest => dest.Active, active)
-                .Create();
-        }
+    private User MakeFakeUser(bool active = true)
+    {
+        return _fixture.Build<User>()
+            .With(dest => dest.Active, active)
+            .Create();
     }
 }

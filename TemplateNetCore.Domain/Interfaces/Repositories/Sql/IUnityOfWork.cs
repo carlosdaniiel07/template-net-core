@@ -1,11 +1,10 @@
 ﻿using TemplateNetCore.Domain.Interfaces.Repositories.Sql.v1;
 
-namespace TemplateNetCore.Domain.Interfaces.Repositories.Sql
+namespace TemplateNetCore.Domain.Interfaces.Repositories.Sql;
+
+public interface IUnityOfWork
 {
-    public interface IUnityOfWork
-    {
-        IUserRepository UserRepository { get; }
-        void Commit();
-        Task CommitAsync();
-    }
+    IUserRepository UserRepository { get; }
+    void Commit();
+    Task CommitAsync();
 }

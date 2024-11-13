@@ -7,28 +7,27 @@ using TemplateNetCore.Infrastructure.Data;
 using Testcontainers.MsSql;
 using Xunit;
 
-namespace TemplateNetCore.Tests
+namespace TemplateNetCore.Tests;
+
+public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    public class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
+    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
+
+    protected override IHost CreateHost(IHostBuilder builder)
     {
-        private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
-
-        protected override IHost CreateHost(IHostBuilder builder)
+        builder.UseEnvironment("Development");
+        builder.ConfigureServices(services =>
         {
-            builder.UseEnvironment("Development");
-            builder.ConfigureServices(services =>
-            {
-                services.RemoveAll(typeof(DbContextOptions<ApplicationDbContext>));
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(_msSqlContainer.GetConnectionString()));
-            });
+            services.RemoveAll(typeof(DbContextOptions<ApplicationDbContext>));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(_msSqlContainer.GetConnectionString()));
+        });
 
-            return base.CreateHost(builder);
-        }
-
-        public Task InitializeAsync() =>
-            _msSqlContainer.StartAsync();
-
-        public new Task DisposeAsync() =>
-            _msSqlContainer.StopAsync();
+        return base.CreateHost(builder);
     }
+
+    public Task InitializeAsync() =>
+        _msSqlContainer.StartAsync();
+
+    public new Task DisposeAsync() =>
+        _msSqlContainer.StopAsync();
 }
