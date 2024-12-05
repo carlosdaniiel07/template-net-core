@@ -1,25 +1,33 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
-using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using TemplateNetCore.Domain.Exceptions;
 
 namespace TemplateNetCore.Api.Middlewares;
 
-public class GlobalErrorHandlerMiddleware(ILogger<GlobalErrorHandlerMiddleware> logger) : IExceptionHandler
+internal sealed class GlobalErrorHandlerMiddleware : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        var response = httpContext.Response;
+        var problemDetails = new ProblemDetails
+        {
+            Status = exception switch
+            {
+                BaseException => (exception as BaseException).StatusCode,
+                _ => StatusCodes.Status500InternalServerError,
+            },
+            Type = exception.GetType().Name,
+            Title = "An unknown error has occurred. Try again later",
+            Detail = exception.Message,
+            Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
+            Extensions = new Dictionary<string, object>
+            {
+                { "requestId", httpContext.TraceIdentifier },
+            },
+        };
 
-        response.ContentType = "application/json";
-        response.StatusCode = exception is BaseException ? (exception as BaseException).StatusCode : (int)HttpStatusCode.InternalServerError;
-
-        var message = response.StatusCode == 500 ? "An unknown error has occurred. Try again later" : exception.Message;
-        var jsonResponse = JsonSerializer.Serialize(new { message });
-
-        logger.LogError(exception, message);
-
-        await response.WriteAsync(jsonResponse, cancellationToken);
+        httpContext.Response.StatusCode = problemDetails.Status.Value;
+        
+        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
         return true;
     }
