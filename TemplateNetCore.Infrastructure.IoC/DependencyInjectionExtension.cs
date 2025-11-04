@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
+using MongoDB.Driver;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
@@ -20,6 +21,7 @@ using TemplateNetCore.Domain.Models.v1;
 using TemplateNetCore.Domain.Services.v1;
 using TemplateNetCore.Infrastructure.Data;
 using TemplateNetCore.Infrastructure.Data.MongoDb.Repositories.v1;
+using TemplateNetCore.Infrastructure.Data.MongoDb.Shared;
 using TemplateNetCore.Infrastructure.Data.Sql.Repositories;
 using TemplateNetCore.Infrastructure.Service.Services.v1;
 
@@ -37,7 +39,7 @@ public static class DependencyInjectionExtension
         AddServices(services);
         AddInfrastructureServices(services);
         AddSqlDataServices(services, configuration);
-        AddMongoDbDataServices(services);
+        AddMongoDbDataServices(services, configuration);
         AddSerilogSeq(host, configuration);
     }
 
@@ -107,8 +109,20 @@ public static class DependencyInjectionExtension
         services.AddScoped<IUnityOfWork, UnityOfWork>();
     }
 
-    private static void AddMongoDbDataServices(IServiceCollection services)
+    private static void AddMongoDbDataServices(IServiceCollection services, IConfiguration configuration)
     {
+        MongoDbConfiguration.Configure();
+
+        services.AddSingleton(_ =>
+        {
+            var connectionString = configuration.GetConnectionString("MongoDb");
+            var databaseName = connectionString.Split('/').Last().Split('?').First();
+            var mongoClient = new MongoClient(connectionString);
+            var mongoDatabase = mongoClient.GetDatabase(databaseName);
+
+            return mongoDatabase;
+        });
+
         services.AddSingleton<IProductRepository, ProductRepository>();
     }
 

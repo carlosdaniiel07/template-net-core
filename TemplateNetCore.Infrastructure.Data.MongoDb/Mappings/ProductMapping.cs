@@ -1,27 +1,26 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
+﻿using MongoDB.Bson.Serialization;
 using TemplateNetCore.Domain.Entities.v1;
+using TemplateNetCore.Infrastructure.Data.MongoDb.Shared;
 
 namespace TemplateNetCore.Infrastructure.Data.MongoDb.Mappings;
 
-public class ProductMapping : IMapping<Product>
+public class ProductMapping : IMapping
 {
-    public BsonClassMap<Product> RegisterMap()
+    public void RegisterClassMap()
     {
-        return BsonClassMap.RegisterClassMap<Product>(classMap =>
+        BsonClassMap.RegisterClassMap<Product>(classMap =>
         {
             classMap
-                .MapMember(survey => survey.Description)
+                .MapMember(x => x.Description)
                 .SetElementName("description");
 
             classMap
-                .MapMember(survey => survey.Category)
+                .MapMember(x => x.Category)
                 .SetElementName("category");
 
             classMap
-                .MapMember(survey => survey.Value)
-                .SetSerializer(new DecimalSerializer(BsonType.Decimal128))
+                .MapMember(x => x.Value)
+                .SetSerializer(Serializers.DecimalSerializer())
                 .SetElementName("value");
         });
     }

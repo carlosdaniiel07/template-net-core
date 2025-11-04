@@ -1,36 +1,38 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
-using MongoDB.Bson.Serialization.Serializers;
 using TemplateNetCore.Domain.Entities.v1;
+using TemplateNetCore.Infrastructure.Data.MongoDb.Shared;
 
 namespace TemplateNetCore.Infrastructure.Data.MongoDb.Mappings;
 
-public static class BaseEntityMapping
+public class BaseEntityMapping : IMapping
 {
-    public static Action<BsonClassMap<BaseEntity>> GetClassMap()
+    public void RegisterClassMap()
     {
-        return (BsonClassMap<BaseEntity> classMap) =>
+        BsonClassMap.RegisterClassMap<BaseEntity>(classMap =>
         {
-            var dateTimeSerializer = new DateTimeSerializer(DateTimeKind.Utc);
-            var nullableDateTimeSerializer = new NullableSerializer<DateTime>().WithSerializer(dateTimeSerializer);
+            classMap.SetIgnoreExtraElements(true);
 
-            classMap.MapIdMember(survey => survey.Id)
-                .SetSerializer(new GuidSerializer(BsonType.String))
-                .SetIdGenerator(new GuidGenerator())
+            classMap
+                .MapIdMember(x => x.Id)
+                .SetSerializer(Serializers.GuidSerializer())
+                .SetIdGenerator(GuidGenerator.Instance)
                 .SetElementName("id");
 
-            classMap.MapMember(survey => survey.CreatedAt)
-                .SetSerializer(dateTimeSerializer)
+            classMap
+                .MapMember(x => x.CreatedAt)
+                .SetSerializer(Serializers.DateTimeSerializer())
                 .SetElementName("createdAt");
 
-            classMap.MapMember(survey => survey.UpdatedAt)
-                .SetSerializer(nullableDateTimeSerializer)
+            classMap
+                .MapMember(x => x.UpdatedAt)
+                .SetSerializer(Serializers.NullableDateTimeSerializer())
                 .SetElementName("updatedAt");
 
-            classMap.MapMember(survey => survey.DeletedAt)
-                .SetSerializer(nullableDateTimeSerializer)
+            classMap
+                .MapMember(x => x.DeletedAt)
+                .SetSerializer(Serializers.NullableDateTimeSerializer())
                 .SetElementName("deletedAt");
-        };
+        });
     }
 }
