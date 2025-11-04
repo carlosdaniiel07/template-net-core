@@ -24,11 +24,11 @@ public class JwtTokenService : ITokenService
         var secretKey = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.Name, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-            }),
+            Subject = new ClaimsIdentity(
+            [
+                new(ClaimTypes.Name, user.Id.ToString()),
+                new(ClaimTypes.Email, user.Email),
+            ]),
             Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes),
             Issuer = _jwtSettings.Issuer,
             Audience = _jwtSettings.Audience,
