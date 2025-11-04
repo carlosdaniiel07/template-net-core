@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using MongoDB.Driver;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
@@ -29,18 +32,18 @@ namespace TemplateNetCore.Infrastructure.IoC;
 
 public static class DependencyInjectionExtension
 {
-    public static void ConfigureBaseServices(this IServiceCollection services, ConfigureHostBuilder host, IConfiguration configuration)
+    public static void ConfigureBaseServices(this WebApplicationBuilder builder)
     {
-        AddMediator(services);
-        AddValidators(services);
-        AddAutoMapper(services);
-        AddConfigurationModels(services, configuration);
-        AddHttpClient(services);
-        AddServices(services);
-        AddInfrastructureServices(services);
-        AddSqlDataServices(services, configuration);
-        AddMongoDbDataServices(services, configuration);
-        AddSerilogSeq(host, configuration);
+        AddMediator(builder.Services);
+        AddValidators(builder.Services);
+        AddAutoMapper(builder.Services);
+        AddConfigurationModels(builder.Services, builder.Configuration);
+        AddHttpClient(builder.Services);
+        AddServices(builder.Services);
+        AddInfrastructureServices(builder.Services);
+        AddSqlDataServices(builder.Services, builder.Configuration);
+        AddMongoDbDataServices(builder.Services, builder.Configuration);
+        AddOpenTelemetry(builder);
     }
 
     private static void AddMediator(IServiceCollection services)
@@ -126,7 +129,35 @@ public static class DependencyInjectionExtension
         services.AddSingleton<IProductRepository, ProductRepository>();
     }
 
-    public static void AddSerilogSeq(ConfigureHostBuilder host, IConfiguration configuration)
+    private static void AddOpenTelemetry(WebApplicationBuilder builder)
+    {
+        var otlpEndpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
+
+        if (string.IsNullOrWhiteSpace(otlpEndpoint))
+            return;
+
+        builder.Services
+            .AddOpenTelemetry()
+            .ConfigureResource(resource => resource.AddService(serviceName: "TemplateNetCore.Api"))
+            .WithTracing(tracing =>
+            {
+                tracing
+                    .SetSampler(new AlwaysOnSampler())
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddOtlpExporter();
+            });
+
+        builder.Logging.AddOpenTelemetry(logging =>
+        {
+            logging.IncludeFormattedMessage = true;
+            logging.IncludeScopes = true;
+
+            logging.AddOtlpExporter();
+        });
+    }
+
+    private static void AddSerilogSeq(ConfigureHostBuilder host, IConfiguration configuration)
     {
         host.UseSerilog((context, config) =>
         {
