@@ -9,9 +9,6 @@ using MongoDB.Driver;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Polly;
-using Polly.CircuitBreaker;
-using Polly.Retry;
 using Serilog;
 using Serilog.Exceptions;
 using TemplateNetCore.Application.Behaviors;
@@ -19,6 +16,7 @@ using TemplateNetCore.Application.Commands.v1.Auth.SignIn;
 using TemplateNetCore.Application.Commands.v1.Auth.SignUp;
 using TemplateNetCore.Domain.Interfaces.Repositories.MongoDb.v1;
 using TemplateNetCore.Domain.Interfaces.Repositories.Sql;
+using TemplateNetCore.Domain.Interfaces.ServiceClients;
 using TemplateNetCore.Domain.Interfaces.Services.v1;
 using TemplateNetCore.Domain.Models.v1;
 using TemplateNetCore.Domain.Services.v1;
@@ -26,11 +24,12 @@ using TemplateNetCore.Infrastructure.Data;
 using TemplateNetCore.Infrastructure.Data.MongoDb.Repositories.v1;
 using TemplateNetCore.Infrastructure.Data.MongoDb.Shared;
 using TemplateNetCore.Infrastructure.Data.Sql.Repositories;
+using TemplateNetCore.Infrastructure.Service.ServiceClients.v1;
 using TemplateNetCore.Infrastructure.Service.Services.v1;
 
 namespace TemplateNetCore.Infrastructure.IoC;
 
-public static class DependencyInjectionExtension
+public static class DependencyInjectionExtensions
 {
     public static void ConfigureBaseServices(this WebApplicationBuilder builder)
     {
@@ -73,24 +72,11 @@ public static class DependencyInjectionExtension
     private static void AddHttpClient(IServiceCollection services)
     {
         services
-            .AddHttpClient<IHttpService, HttpService>()
-            .AddResilienceHandler("default", builder =>
+            .AddHttpClient<IZipCodeServiceClient, ViaCepServiceClient>(client =>
             {
-                builder.AddTimeout(TimeSpan.FromSeconds(10));
-                builder.AddRetry(new RetryStrategyOptions<HttpResponseMessage>
-                {
-                    MaxRetryAttempts = 3,
-                    Delay = TimeSpan.FromSeconds(1),
-                    BackoffType = DelayBackoffType.Constant,
-                });
-                builder.AddCircuitBreaker(new CircuitBreakerStrategyOptions<HttpResponseMessage>
-                {
-                    SamplingDuration = TimeSpan.FromSeconds(10),
-                    FailureRatio = 0.9,
-                    MinimumThroughput = 5,
-                    BreakDuration = TimeSpan.FromSeconds(30),
-                });
-            });
+                client.BaseAddress = new Uri("https://viacep.com.br");
+            })
+            .AddDefaultResilienceHandler(timeoutInSeconds: 3);
     }
 
     private static void AddServices(IServiceCollection services)

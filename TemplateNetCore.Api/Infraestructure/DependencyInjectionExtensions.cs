@@ -10,7 +10,7 @@ using TemplateNetCore.Infrastructure.IoC;
 
 namespace TemplateNetCore.Api.Infraestructure;
 
-public static class DependencyInjectionExtension
+public static class DependencyInjectionExtensions
 {
     public static void Configure(this WebApplicationBuilder builder)
     {

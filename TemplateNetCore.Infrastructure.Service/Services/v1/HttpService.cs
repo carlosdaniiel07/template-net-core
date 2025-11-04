@@ -2,16 +2,16 @@
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
-using TemplateNetCore.Domain.Interfaces.Services.v1;
 
 namespace TemplateNetCore.Infrastructure.Service.Services.v1;
 
-public class HttpService : IHttpService
+public abstract class HttpService(HttpClient httpClient)
 {
-    private readonly HttpClient _httpClient;
-
-    public HttpService(HttpClient httpClient) =>
-        _httpClient = httpClient;
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true,
+    };
 
     public async Task<TResponse> GetAsync<TResponse>(string url, Dictionary<string, string> headers = null)
     {
@@ -19,21 +19,18 @@ public class HttpService : IHttpService
 
         AddHeaders(requestMessage, headers);
 
-        var response = await _httpClient.SendAsync(requestMessage);
+        var response = await httpClient.SendAsync(requestMessage);
 
         response.EnsureSuccessStatusCode();
 
         var responseJson = await response.Content.ReadAsStringAsync();
 
-        return JsonSerializer.Deserialize<TResponse>(responseJson, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        });
+        return JsonSerializer.Deserialize<TResponse>(responseJson, _jsonSerializerOptions);
     }
 
     public async Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest request, Dictionary<string, string> headers = null)
     {
-        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, new MediaTypeHeaderValue(MediaTypeNames.Application.Json));
+        var content = new StringContent(JsonSerializer.Serialize(request, _jsonSerializerOptions), Encoding.UTF8, new MediaTypeHeaderValue(MediaTypeNames.Application.Json));
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
         {
             Content = content,
@@ -41,21 +38,18 @@ public class HttpService : IHttpService
 
         AddHeaders(requestMessage, headers);
 
-        var response = await _httpClient.SendAsync(requestMessage);
+        var response = await httpClient.SendAsync(requestMessage);
 
         response.EnsureSuccessStatusCode();
 
         var responseJson = await response.Content.ReadAsStringAsync();
 
-        return JsonSerializer.Deserialize<TResponse>(responseJson, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        });
+        return JsonSerializer.Deserialize<TResponse>(responseJson, _jsonSerializerOptions);
     }
 
     private void AddHeaders(HttpRequestMessage httpRequestMessage, Dictionary<string, string> headers)
     {
-        foreach (var header in headers ?? new Dictionary<string, string>())
+        foreach (var header in headers ?? [])
             httpRequestMessage.Headers.Add(header.Key, header.Value);
     }
 }
